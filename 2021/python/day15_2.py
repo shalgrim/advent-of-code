@@ -1,7 +1,5 @@
 from copy import deepcopy
 
-from day15_1 import PathFinder
-
 
 def increase_line(line, x):
     return [i + x if i + x <= 9 else i + x - 9 for i in line]
@@ -16,7 +14,6 @@ def process_input_day2(lines):
     original_grid = deepcopy(grid)
 
     for x in range(1, 5):
-        print(x)
         for y, line in enumerate(original_grid):
             new_line = increase_line(line, x)
             grid[y] += new_line
@@ -30,13 +27,35 @@ def process_input_day2(lines):
     return grid
 
 
+def method2(grid):
+    max_y = len(grid) - 1
+    max_x = len(grid[0]) - 1
+    shortests = {(max_y, max_x): 0}
+
+    for x in range(max_x - 1, -1, -1):
+        shortests[(max_y, x)] = grid[max_y][x + 1] + shortests[(max_y, x + 1)]
+
+    for y in range(max_y - 1, -1, -1):
+        shortests[(y, max_x)] = grid[y + 1][max_x] + shortests[(y + 1, max_x)]
+
+    for y in range(max_y - 1, -1, -1):
+        for x in range(max_x - 1, -1, -1):
+            shortests[(y, x)] = min(
+                [
+                    shortests[(y + 1, x)] + grid[y + 1][x],
+                    shortests[(y, x + 1)] + grid[y][x + 1],
+                ]
+            )
+
+    return shortests[(0, 0)]
+
+
 def main(lines):
     grid = process_input_day2(lines)
-    pf = PathFinder(grid)
-    return pf.find_lowest_risk_path()
+    return method2(grid)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # 3068 is too high
     with open('../data/input15.txt') as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
