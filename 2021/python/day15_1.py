@@ -27,15 +27,12 @@ class PathFinder:
 
     def find_lowest_risk_path(self):
         self._find_lowest_risk_path(position=(0, 0), risk=0, visited=[])
-        print(f'{self.shortest_from=}')
         return self.shortest_known_path
 
     def _find_lowest_risk_path(self, position, risk, visited):
         if position in self.shortest_from:
             if risk + self.shortest_from[position] < self.shortest_known_path:
                 self.shortest_known_path = risk + self.shortest_from[position]
-                print(f'setting {self.shortest_known_path=}')
-                print(f'{visited=}')
             return self.shortest_from[position]
 
         neighbors = self.get_neighbors(position)
