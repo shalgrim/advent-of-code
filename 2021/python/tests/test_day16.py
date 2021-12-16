@@ -20,3 +20,10 @@ def test_calc_version_sum(puzzle_input):
 
 def test_main2():
     assert main2('C200B40A82') == 3
+    assert main2('04005AC33890') == 54
+    assert main2('880086C3E88112') == 7
+    assert main2('CE00C43D881120') == 9
+    assert main2('D8005AC2A8F0') == 1
+    assert main2('F600BC2D8F') == 0
+    assert main2('9C005AC2F8F0') == 0
+    assert main2('9C0141080250320F1802104A08') == 1
