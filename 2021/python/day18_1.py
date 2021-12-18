@@ -1,24 +1,39 @@
 class SnailfishNumber:
-    def __init__(self, pair, parent=None, depth=1):
+    def __init__(self, pair, parent=None):
         self.nodes = {} if parent is None else parent.nodes
         self.parent = parent
-        self.depth = depth
 
         left, right = pair
         self.left = (
-            left if isinstance(left, int) else SnailfishNumber(left, self, depth + 1)
+            left if isinstance(left, int) else SnailfishNumber(left, self)
         )
         self.node_val = 0 if not self.nodes else max(list(self.nodes.keys())) + 1
         self.nodes[self.node_val] = self
         self.right = (
-            right if isinstance(right, int) else SnailfishNumber(right, self, depth + 1)
+            right if isinstance(right, int) else SnailfishNumber(right, self)
         )
+
+    def renumber_nodes(self):
+        self.nodes = {}
+        self._renumber_nodes()
+
+    def _renumber_nodes(self):
+        if isinstance(self.left, SnailfishNumber):
+            self.left._renumber_nodes()
+        self.node_val = 0 if not self.nodes else max(list(self.nodes.keys())) + 1
+        self.nodes[self.node_val] = self
+        if isinstance(self.right, SnailfishNumber):
+            self.right._renumber_nodes()
 
     def __str__(self):
         return str(self.raw_form())
 
     def __add__(self, other):
         return SnailfishNumber([self.raw_form(), other.raw_form()])
+
+    @property
+    def depth(self):
+        return 1 if self.parent is None else self.parent.depth + 1
 
     def can_explode(self):
         return (
@@ -29,6 +44,14 @@ class SnailfishNumber:
             )
             or (isinstance(self.left, SnailfishNumber) and self.left.can_explode())
             or (isinstance(self.right, SnailfishNumber) and self.right.can_explode())
+        )
+
+    def can_split(self):
+        return (
+            (isinstance(self.left, int) and self.left >= 10)
+            or (isinstance(self.right, int) and self.right >= 10)
+            or (isinstance(self.left, SnailfishNumber) and self.left.can_split())
+            or (isinstance(self.right, SnailfishNumber) and self.right.can_split())
         )
 
     def get_exploding_pair(self):
@@ -133,17 +156,20 @@ class SnailfishNumber:
         new_left = self.left // 2
         new_right = self.left // 2 + self.left % 2
 
-        # TODO: fix node vals, they'll be wrong
-        self.left = SnailfishNumber([new_left, new_right], self, self.depth + 1)
+        self.left = SnailfishNumber([new_left, new_right], self)
 
     def _split_right(self):
         new_left = self.right // 2
         new_right = self.right // 2 + self.right % 2
 
-        # TODO: fix node vals, they'll be wrong
-        self.right = SnailfishNumber([new_left, new_right], self, self.depth + 1)
+        self.right = SnailfishNumber([new_left, new_right], self)
 
     def split(self):
+        answer = self._split()
+        self._renumber_nodes()
+        return answer
+
+    def _split(self):
         if isinstance(self.left, int):
             if self.left >= 10:
                 self._split_left()
@@ -159,6 +185,16 @@ class SnailfishNumber:
                 return True
         else:
             return self.right.split()
+
+    def reduce(self):
+        while True:
+            if self.can_explode():
+                self.explode()
+                continue
+            if self.can_split():
+                self.split()
+                continue
+            break
 
 
 def needs_to_explode(raw_snailfish_number):
@@ -184,4 +220,10 @@ def explode(raw_snailfish_number):
 def split(raw_snailfish_number):
     sfn = SnailfishNumber(raw_snailfish_number)
     sfn.split()
+    return sfn.raw_form()
+
+
+def reduce(raw_snailfish_number):
+    sfn = SnailfishNumber(raw_snailfish_number)
+    sfn.reduce()
     return sfn.raw_form()

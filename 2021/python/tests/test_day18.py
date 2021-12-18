@@ -1,4 +1,4 @@
-from day18_1 import SnailfishNumber, explode, needs_to_explode, split
+from day18_1 import SnailfishNumber, explode, needs_to_explode, split, reduce
 
 
 def test_needs_to_explode():
@@ -31,6 +31,11 @@ def test_explode():
     ]
 
 
+def test_can_split():
+    assert SnailfishNumber([[[[0, 7], 4], [15, [0, 13]]], [1, 1]]).can_split()
+    assert SnailfishNumber([[[[0, 7], 4], [[7, 8], [0, 13]]], [1, 1]]).can_split()
+
+
 def test_split():
     assert split([[[[0, 7], 4], [15, [0, 13]]], [1, 1]]) == [
         [[[0, 7], 4], [[7, 8], [0, 13]]],
@@ -45,3 +50,10 @@ def test_split():
 def test_addition():
     added = SnailfishNumber([1, 2]) + SnailfishNumber([[3, 4], 5])
     assert added.raw_form() == [[1, 2], [[3, 4], 5]]
+
+
+def test_reduce():
+    assert reduce([[[[[4, 3], 4], 4], [7, [[8, 4], 9]]], [1, 1]]) == [
+        [[[0, 7], 4], [[7, 8], [6, 0]]],
+        [8, 1],
+    ]
