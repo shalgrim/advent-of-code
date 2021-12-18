@@ -126,6 +126,37 @@ class SnailfishNumber:
         raw_right = self.right if isinstance(self.right, int) else self.right.raw_form()
         return [raw_left, raw_right]
 
+    def _split_left(self):
+        new_left = self.left // 2
+        new_right = self.left // 2 + self.left % 2
+
+        # TODO: fix node vals, they'll be wrong
+        self.left = SnailfishNumber([new_left, new_right], self, self.depth + 1)
+
+    def _split_right(self):
+        new_left = self.right // 2
+        new_right = self.right // 2 + self.right % 2
+
+        # TODO: fix node vals, they'll be wrong
+        self.right = SnailfishNumber([new_left, new_right], self, self.depth + 1)
+
+    def split(self):
+        if isinstance(self.left, int):
+            if self.left >= 10:
+                self._split_left()
+                return True
+        else:
+            left_split = self.left.split()
+            if left_split:
+                return True
+
+        if isinstance(self.right, int):
+            if self.right >= 10:
+                self._split_right()
+                return True
+        else:
+            return self.right.split()
+
 
 def needs_to_explode(raw_snailfish_number):
     srep = str(raw_snailfish_number)
@@ -144,4 +175,10 @@ def needs_to_explode(raw_snailfish_number):
 def explode(raw_snailfish_number):
     sfn = SnailfishNumber(raw_snailfish_number)
     sfn.explode()
+    return sfn.raw_form()
+
+
+def split(raw_snailfish_number):
+    sfn = SnailfishNumber(raw_snailfish_number)
+    sfn.split()
     return sfn.raw_form()
