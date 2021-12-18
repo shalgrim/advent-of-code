@@ -1,8 +1,9 @@
 import math
-from day16_1 import create_bin_string, get_version_and_type, convert_literal
+
+from day16_1 import convert_literal, create_bin_string, get_version_and_type
 
 
-def prod_num_subpackets(bin_string, num_subpackets, cursor):
+def collect_subpackets(bin_string, cursor, num_subpackets):
     values = []
     for i in range(num_subpackets):
         packet_version, packet_type = get_version_and_type(bin_string, cursor)
@@ -12,152 +13,52 @@ def prod_num_subpackets(bin_string, num_subpackets, cursor):
         else:
             subpacket_value, cursor = calculate(bin_string, cursor)
         values.append(subpacket_value)
+    return cursor, values
 
-    answer = math.prod(values)
+
+def add_num_subpackets(bin_string, num_subpackets, cursor):
+    cursor, values = collect_subpackets(bin_string, cursor, num_subpackets)
+    answer = sum(values)
     return answer, cursor
 
 
-def prod_num_bits(bin_string, num_bits, cursor):
-    values = []
-    last_bit = cursor + num_bits
-    while cursor < last_bit:
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
+def prod_num_subpackets(bin_string, num_subpackets, cursor):
+    cursor, values = collect_subpackets(bin_string, cursor, num_subpackets)
     answer = math.prod(values)
     return answer, cursor
 
 
 def minimum_num_subpackets(bin_string, num_subpackets, cursor):
-    values = []
-    for i in range(num_subpackets):
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
+    cursor, values = collect_subpackets(bin_string, cursor, num_subpackets)
     answer = min(values)
     return answer, cursor
 
 
-def minimum_num_bits(bin_string, num_bits, cursor):
-    values = []
-    last_bit = cursor + num_bits
-    while cursor < last_bit:
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
-    answer = min(values)
-    return answer, cursor
-
-
-def maximum_num_bits(bin_string, num_bits, cursor):
-    values = []
-    last_bit = cursor + num_bits
-    while cursor < last_bit:
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
+def maximum_num_subpackets(bin_string, num_subpackets, cursor):
+    cursor, values = collect_subpackets(bin_string, cursor, num_subpackets)
     answer = max(values)
     return answer, cursor
 
 
 def gt_num_subpackets(bin_string, num_subpackets, cursor):
-    values = []
-    for i in range(num_subpackets):
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
+    cursor, values = collect_subpackets(bin_string, cursor, num_subpackets)
     answer = 1 if values[0] > values[1] else 0
-    return answer, cursor
-
-
-def gt_num_bits(bin_string, num_bits, cursor):
-    values = []
-    last_bit = cursor + num_bits
-    while cursor < last_bit:
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
-    answer = 1 if values[0] > values[1] else 0
-    return answer, cursor
-
-
-def lt_num_bits(bin_string, num_bits, cursor):
-    values = []
-    last_bit = cursor + num_bits
-    while cursor < last_bit:
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
-    answer = 1 if values[0] < values[1] else 0
     return answer, cursor
 
 
 def lt_num_subpackets(bin_string, num_subpackets, cursor):
-    values = []
-    for i in range(num_subpackets):
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
+    cursor, values = collect_subpackets(bin_string, cursor, num_subpackets)
     answer = 1 if values[0] < values[1] else 0
     return answer, cursor
 
 
 def eq_num_subpackets(bin_string, num_subpackets, cursor):
-    values = []
-    for i in range(num_subpackets):
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        values.append(subpacket_value)
-
+    cursor, values = collect_subpackets(bin_string, cursor, num_subpackets)
     answer = 1 if values[0] == values[1] else 0
     return answer, cursor
 
 
-def eq_num_bits(bin_string, num_bits, cursor):
+def collect_subpackets_by_bits(bin_string, cursor, num_bits):
     values = []
     last_bit = cursor + num_bits
     while cursor < last_bit:
@@ -168,54 +69,48 @@ def eq_num_bits(bin_string, num_bits, cursor):
         else:
             subpacket_value, cursor = calculate(bin_string, cursor)
         values.append(subpacket_value)
+    return cursor, values
 
-    answer = 1 if values[0] == values[1] else 0
+
+def add_num_bits(bin_string, num_bits, cursor):
+    cursor, values = collect_subpackets_by_bits(bin_string, cursor, num_bits)
+    answer = sum(values)
     return answer, cursor
 
 
-def maximum_num_subpackets(bin_string, num_subpackets, cursor):
-    values = []
-    for i in range(num_subpackets):
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
+def prod_num_bits(bin_string, num_bits, cursor):
+    cursor, values = collect_subpackets_by_bits(bin_string, cursor, num_bits)
+    answer = math.prod(values)
+    return answer, cursor
 
+
+def minimum_num_bits(bin_string, num_bits, cursor):
+    cursor, values = collect_subpackets_by_bits(bin_string, cursor, num_bits)
+    answer = min(values)
+    return answer, cursor
+
+
+def maximum_num_bits(bin_string, num_bits, cursor):
+    cursor, values = collect_subpackets_by_bits(bin_string, cursor, num_bits)
     answer = max(values)
     return answer, cursor
 
 
-def add_num_subpackets(bin_string, num_subpackets, cursor):
-    values = []
-    for i in range(num_subpackets):
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
-
-    answer = sum(values)
+def gt_num_bits(bin_string, num_bits, cursor):
+    cursor, values = collect_subpackets_by_bits(bin_string, cursor, num_bits)
+    answer = 1 if values[0] > values[1] else 0
     return answer, cursor
 
 
-def add_num_bits(bin_string, num_bits, cursor):
-    values = []
-    last_bit = cursor + num_bits
-    while cursor < last_bit:
-        packet_version, packet_type = get_version_and_type(bin_string, cursor)
-        if packet_type == 4:
-            cursor += 6
-            subpacket_value, cursor = convert_literal(bin_string, cursor)
-        else:
-            subpacket_value, cursor = calculate(bin_string, cursor)
-        values.append(subpacket_value)
+def lt_num_bits(bin_string, num_bits, cursor):
+    cursor, values = collect_subpackets_by_bits(bin_string, cursor, num_bits)
+    answer = 1 if values[0] < values[1] else 0
+    return answer, cursor
 
-    answer = sum(values)
+
+def eq_num_bits(bin_string, num_bits, cursor):
+    cursor, values = collect_subpackets_by_bits(bin_string, cursor, num_bits)
+    answer = 1 if values[0] == values[1] else 0
     return answer, cursor
 
 
