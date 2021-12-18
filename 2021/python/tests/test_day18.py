@@ -6,6 +6,7 @@ from day18_1 import (
     reduce_from_file,
     split,
 )
+from day18_2 import main as main2
 
 
 def test_needs_to_explode():
@@ -86,4 +87,13 @@ def test_reduce_from_file():
 
 
 def test_magnitude():
-    assert SnailfishNumber([[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]).magnitude() == 4140
+    assert (
+        SnailfishNumber(
+            [[[[6, 6], [7, 6]], [[7, 7], [7, 0]]], [[[7, 7], [7, 7]], [[7, 8], [9, 9]]]]
+        ).magnitude()
+        == 4140
+    )
+
+
+def test_main2():
+    assert main2('../../data/test18_5.txt') == 3993

@@ -250,3 +250,12 @@ def reduce_from_file(filename):
         sfn.reduce()
 
     return sfn.raw_form()
+
+
+def main(filename):
+    reduction = reduce_from_file(filename)
+    return SnailfishNumber(reduction).magnitude()
+
+
+if __name__ == '__main__':
+    print(main('../data/input18.txt'))
