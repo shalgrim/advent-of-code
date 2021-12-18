@@ -40,3 +40,8 @@ def test_split():
         [[[0, 7], 4], [[7, 8], [0, [6, 7]]]],
         [1, 1],
     ]
+
+
+def test_addition():
+    added = SnailfishNumber([1, 2]) + SnailfishNumber([[3, 4], 5])
+    assert added.raw_form() == [[1, 2], [[3, 4], 5]]

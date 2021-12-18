@@ -17,6 +17,9 @@ class SnailfishNumber:
     def __str__(self):
         return str(self.raw_form())
 
+    def __add__(self, other):
+        return SnailfishNumber([self.raw_form(), other.raw_form()])
+
     def can_explode(self):
         return (
             (
