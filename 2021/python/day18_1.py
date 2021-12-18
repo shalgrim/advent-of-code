@@ -4,14 +4,10 @@ class SnailfishNumber:
         self.parent = parent
 
         left, right = pair
-        self.left = (
-            left if isinstance(left, int) else SnailfishNumber(left, self)
-        )
+        self.left = left if isinstance(left, int) else SnailfishNumber(left, self)
         self.node_val = 0 if not self.nodes else max(list(self.nodes.keys())) + 1
         self.nodes[self.node_val] = self
-        self.right = (
-            right if isinstance(right, int) else SnailfishNumber(right, self)
-        )
+        self.right = right if isinstance(right, int) else SnailfishNumber(right, self)
 
     def renumber_nodes(self):
         self.nodes = {}
@@ -34,6 +30,11 @@ class SnailfishNumber:
     @property
     def depth(self):
         return 1 if self.parent is None else self.parent.depth + 1
+
+    def magnitude(self):
+        left_val = self.left if isinstance(self.left, int) else self.left.magnitude()
+        right_val = self.right if isinstance(self.right, int) else self.right.magnitude()
+        return 3 * left_val + 2 * right_val
 
     def can_explode(self):
         return (
@@ -226,4 +227,26 @@ def split(raw_snailfish_number):
 def reduce(raw_snailfish_number):
     sfn = SnailfishNumber(raw_snailfish_number)
     sfn.reduce()
+    return sfn.raw_form()
+
+
+def add_snailfish_numbers(numbers):
+    sfn = SnailfishNumber(numbers[0])
+    for number in numbers[1:]:
+        sfn = sfn + SnailfishNumber(number)
+
+    return sfn.raw_form()
+
+
+def reduce_from_file(filename):
+    with open(filename) as f:
+        lines = [eval(line) for line in f.readlines()]
+
+    sfn = SnailfishNumber(lines[0])
+    sfn.reduce()
+
+    for line in lines[1:]:
+        sfn = sfn + SnailfishNumber(line)
+        sfn.reduce()
+
     return sfn.raw_form()

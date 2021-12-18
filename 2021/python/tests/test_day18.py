@@ -1,4 +1,11 @@
-from day18_1 import SnailfishNumber, explode, needs_to_explode, split, reduce
+from day18_1 import (
+    SnailfishNumber,
+    explode,
+    needs_to_explode,
+    reduce,
+    reduce_from_file,
+    split,
+)
 
 
 def test_needs_to_explode():
@@ -57,3 +64,26 @@ def test_reduce():
         [[[0, 7], 4], [[7, 8], [6, 0]]],
         [8, 1],
     ]
+
+
+def test_reduce_from_file():
+    assert reduce_from_file('../../data/test18_1.txt') == [
+        [[[1, 1], [2, 2]], [3, 3]],
+        [4, 4],
+    ]
+    assert reduce_from_file('../../data/test18_2.txt') == [
+        [[[3, 0], [5, 3]], [4, 4]],
+        [5, 5],
+    ]
+    assert reduce_from_file('../../data/test18_3.txt') == [
+        [[[5, 0], [7, 4]], [5, 5]],
+        [6, 6],
+    ]
+    assert reduce_from_file('../../data/test18_4.txt') == [
+        [[[8, 7], [7, 7]], [[8, 6], [7, 7]]],
+        [[[0, 7], [6, 6]], [8, 7]],
+    ]
+
+
+def test_magnitude():
+    assert SnailfishNumber([[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]).magnitude() == 4140
