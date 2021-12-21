@@ -29,8 +29,8 @@ if __name__ == '__main__':
         lines = [line.strip() for line in f.readlines()]
 
     print(main(lines))
-    #
-    # with open('../data/input20.txt') as f:
-    #     lines = [line.strip() for line in f.readlines()]
-    #
-    # print(main(lines))
+
+    with open('../data/input20.txt') as f:  # 46453 is too high
+        lines = [line.strip() for line in f.readlines()]
+
+    print(main(lines, flips=True))
