@@ -2,43 +2,6 @@ from collections import defaultdict
 from itertools import combinations
 
 
-class Scanner:
-    def __init__(self, scanner_id):
-        self.sid = scanner_id
-        self.beacons = {}
-
-    def add_beacon(self, coords):
-        beacon_id = 0 if not self.beacons else max(self.beacons.keys()) + 1
-        self.beacons[beacon_id] = coords
-
-    @property
-    def distance_signatures(self):
-        answer = {}
-        for source_beacon_id, source in self.beacons.items():
-            ds = []
-            for destination_beacon_id, destination in self.beacons.items():
-                if source_beacon_id == destination_beacon_id:
-                    continue
-                ds.append(
-                    frozenset({abs(source[i] - destination[i]) for i in range(3)})
-                )
-            answer[source_beacon_id] = ds
-        return answer
-
-    def overlaps(self, other):
-        for self_beacon_id, self_ds in self.distance_signatures.items():
-            for other_beacon_id, other_ds in other.distance_signatures.items():
-                if len(set(self_ds).intersection(set(other_ds))) >= 11:
-                    return True
-        return False
-
-    # def overlap_sets(self, other):
-    #     answer = []
-    #     for self_beacon_id, self_ds in self.distance_signatures.items():
-    #         for other_beacon_id, other_ds in other.distance_signatures.items():
-
-
-
 def coords_from_lines(lines):
     coords = []
     for line in lines.split():
@@ -116,6 +79,83 @@ def process_input(lines):
     return scanners
 
 
+class Scanner:
+    def __init__(self, scanner_id):
+        self.sid = scanner_id
+        self.beacons = {}
+
+    def add_beacon(self, coords):
+        beacon_id = 0 if not self.beacons else max(self.beacons.keys()) + 1
+        self.beacons[beacon_id] = coords
+
+    @property
+    def distance_signatures(self):
+        answer = {}
+        for source_beacon_id, source in self.beacons.items():
+            ds = []
+            for destination_beacon_id, destination in self.beacons.items():
+                if source_beacon_id == destination_beacon_id:
+                    continue
+                ds.append(
+                    frozenset({abs(source[i] - destination[i]) for i in range(3)})
+                )
+            answer[source_beacon_id] = ds
+        return answer
+
+    def overlaps(self, other):
+        for self_beacon_id, self_ds in self.distance_signatures.items():
+            for other_beacon_id, other_ds in other.distance_signatures.items():
+                if len(set(self_ds).intersection(set(other_ds))) >= 11:
+                    return self_beacon_id, other_beacon_id
+        return False
+
+
+def orient(scanner1, scanner2):
+    mapping = {}
+    for source_beacon_id, source_ds in scanner1.distance_signatures.items():
+        for dest_beacon_id, dest_ds in scanner2.distance_signatures.items():
+            if len(set(source_ds).intersection(set(dest_ds))) >= 11:
+                mapping[source_beacon_id] = dest_beacon_id
+
+    assert len(mapping) >= 12
+    beacon_pairs = list(mapping.items())
+    first_pair, second_pair = beacon_pairs[:2]
+
+    # now rotate
+    source_b1 = scanner1.beacons[first_pair[0]]
+    source_b2 = scanner1.beacons[second_pair[0]]
+    dest_b1 = scanner2.beacons[first_pair[1]]
+    dest_b2 = scanner2.beacons[second_pair[1]]
+
+    diffs_1 = [source_b2[i] - source_b1[i] for i in range(3)]
+    if len(set(diffs_1)) < 3:
+        print("WARNING you didn't code for this")
+    diffs_2 = [dest_b2[i] - dest_b1[i] for i in range(3)]
+
+    rotation = []
+    polarity = []
+    for self_index, self_val in enumerate(diffs_1):
+        if self_val in diffs_2:
+            other_index = diffs_2.index(self_val)
+            polarity.append(1)
+        else:
+            other_index = diffs_2.index(-self_val)
+            polarity.append(-1)
+        rotation.append(other_index)
+
+    position = []
+
+    for i, source_val in enumerate(source_b1):
+        dest_val = dest_b1[abs(rotation[i])]
+        pol = polarity[i]
+        if pol < 0:
+            position.append(source_val - -dest_val)
+        else:
+            position.append(source_val - dest_val)
+
+    return position, (rotation, polarity)
+
+
 def main(lines):
     scanners = process_input(lines)
     overlaps = []
@@ -126,11 +166,33 @@ def main(lines):
                 continue
             if scanner.overlaps(other_scanner):
                 overlaps.append((scanner_id, other_scanner_id))
-                # TODO: for every shared beacon add in the form:
-                # (source_scanner_id, destination_scanner_id, source_beacon_id, destination_beacon_id)
-                # and then what...?
-                # it may make more sense to absolutely identify positions and orientations because
-                # then i can uniquify all beacons
+
+    print(f'{overlaps=}')
+
+    # now try orienting all of them so I can uniquify all
+    scanners[0].position = (0, 0, 0)
+    positions = {0: (0, 0, 0)}
+    rotations = defaultdict(dict)
+
+    while len(positions) < len(scanners):
+        for overlap in overlaps:
+            # TODO: for every shared beacon add in the form:
+            # (source_scanner_id, destination_scanner_id, source_beacon_id, destination_beacon_id)
+            # and then what...?
+            # it may make more sense to absolutely identify positions and orientations because
+            # then i can uniquify all beacons
+            # let's try the second thing first and if that doesn't work i've got the first idea
+
+            s1 = scanners[overlap[0]]
+            s2 = scanners[overlap[1]]
+
+            # TODO: don't forget about rotations
+            if s1.sid in positions and s2.sid not in positions:
+                positions[s2.sid], rotations[s2.sid][s1.sid] = orient(s1, s2)
+                continue  # just here for the breakpoint
+            elif s2.sid in positions and s1.sid not in positions:
+                positions[s1.sid], rotations[s1.sid][s2.sid] = orient(s2, s1)
+                continue  # just here for the breakpoint
 
     raise NotImplementedError
 
