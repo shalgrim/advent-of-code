@@ -47,6 +47,7 @@ def generate_roll(game_key):
     game_key_9 = generate_game_key(game_key, 9)
 
     # Counter would be perfect here if I had the docs
+    # upon further reflection it's probably unnecessary since incoming game key is always the same
     answer = defaultdict(int)
     answer[game_key_3] += 1
     answer[game_key_4] += 3
@@ -62,7 +63,7 @@ def generate_roll(game_key):
 def main(p1_start, p2_start):
     # represent a game as (p1_score, p2_score, p1_position, p2_position, next_player)
     games = defaultdict(int)
-    games[(0, 0, p1_start, p2_start, 0)] = 1
+    games[(0, 0, p1_start-1, p2_start-1, 0)] = 1
 
     while any([key[0] < 21 and key[1] < 21 for key in games.keys()]):
         print(f'{len(games)=}')
@@ -86,6 +87,7 @@ if __name__ == '__main__':
     # 4, 8 is test input:
     #   p1 wins 444_356_092_776_315 times
     #   p2 wins 341_960_390_180_808 times
-    # but I got (1_569_797_591_114_627_206_115_164_600, 729_523_779_402_893_076_631_605_939)
+    # but I got much higher numbers:
+    # (1720699712104215070984808296, 607133155452432293045890757)
     # 10, 8 is my actual input
     print(main(4, 8))
