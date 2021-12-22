@@ -69,7 +69,7 @@ def main(p1_start, p2_start):
         print(f'{len(games)=}')
         new_games = defaultdict(int)
         for game_key, game_count in games.items():
-            if game_key[0] > 21 or game_key[1] > 21:
+            if game_key[0] >= 21 or game_key[1] >= 21:
                 # this game is over, somebody has won
                 new_games[game_key] += game_count
             for new_game_key, new_game_count in generate_roll(game_key).items():
@@ -88,6 +88,6 @@ if __name__ == '__main__':
     #   p1 wins 444_356_092_776_315 times
     #   p2 wins 341_960_390_180_808 times
     # but I got much higher numbers:
-    # (1720699712104215070984808296, 607133155452432293045890757)
+    # (1737835340729268534253101094, 617915082342836639405918710)
     # 10, 8 is my actual input
     print(main(4, 8))
