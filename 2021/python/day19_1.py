@@ -164,9 +164,17 @@ def absolutify(
     reference_rotation,
     reference_polarity,
 ):
+
+    # this loop got me four out of five in the test
+    # out_position = []
+    # for rel_pos, ref_pos, ref_pol in zip(relative_position, reference_position, reference_polarity):
+    #     out_position.append(ref_pol * rel_pos + ref_pos)
+
     out_position = []
-    for rel_pos, ref_pos, ref_pol in zip(relative_position, reference_position, reference_polarity):
-        out_position.append(ref_pol * rel_pos + ref_pos)
+    for i in range(3):
+        rel_pos = relative_position[reference_rotation[i]] * reference_polarity[i]
+        ref_pos = reference_position[i]
+        out_position.append(rel_pos + ref_pos)
 
     out_rotation = []
     for rel_rot in relative_rotation:
