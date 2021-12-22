@@ -146,7 +146,7 @@ def orient(scanner1, scanner2):
     position = []
 
     for i, source_val in enumerate(source_b1):
-        dest_val = dest_b1[abs(rotation[i])]
+        dest_val = dest_b1[rotation[i]]
         pol = polarity[i]
         if pol < 0:
             position.append(source_val - -dest_val)
@@ -193,8 +193,7 @@ def main(lines):
     print(f'{overlaps=}')
 
     # now try orienting all of them so I can uniquify all
-    scanners[0].position = (0, 0, 0)
-    positions = {0: (0, 0, 0)}
+    positions = {0: [0, 0, 0]}
     rotations = {0: [0, 1, 2]}
     polarities = {0: [1, 1, 1]}
 
