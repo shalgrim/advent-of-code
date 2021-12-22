@@ -153,7 +153,30 @@ def orient(scanner1, scanner2):
         else:
             position.append(source_val - dest_val)
 
-    return position, (rotation, polarity)
+    return position, rotation, polarity
+
+
+def absolutify(
+    relative_position,
+    relative_rotation,
+    relative_polarity,
+    reference_position,
+    reference_rotation,
+    reference_polarity,
+):
+    out_position = []
+    for rel_pos, ref_pos, ref_pol in zip(relative_position, reference_position, reference_polarity):
+        out_position.append(ref_pol * rel_pos + ref_pos)
+
+    out_rotation = []
+    for rel_rot in relative_rotation:
+        out_rotation.append(reference_rotation[rel_rot])
+
+    out_polarity = []
+    for rel_pol, ref_pol in zip(relative_polarity, reference_polarity):
+        out_polarity.append(rel_pol * ref_pol)
+
+    return out_position, out_rotation, out_polarity
 
 
 def main(lines):
@@ -172,7 +195,8 @@ def main(lines):
     # now try orienting all of them so I can uniquify all
     scanners[0].position = (0, 0, 0)
     positions = {0: (0, 0, 0)}
-    rotations = defaultdict(dict)
+    rotations = {0: [0, 1, 2]}
+    polarities = {0: [1, 1, 1]}
 
     while len(positions) < len(scanners):
         for overlap in overlaps:
@@ -186,12 +210,33 @@ def main(lines):
             s1 = scanners[overlap[0]]
             s2 = scanners[overlap[1]]
 
-            # TODO: don't forget about rotations
             if s1.sid in positions and s2.sid not in positions:
-                positions[s2.sid], rotations[s2.sid][s1.sid] = orient(s1, s2)
+                relative_position, relative_rotation, relative_polarity = orient(s1, s2)
+                absolute_position, absolute_rotation, absolute_polarity = absolutify(
+                    relative_position,
+                    relative_rotation,
+                    relative_polarity,
+                    positions[s1.sid],
+                    rotations[s1.sid],
+                    polarities[s1.sid],
+                )
+                positions[s2.sid] = absolute_position
+                rotations[s2.sid] = absolute_rotation
+                polarities[s2.sid] = absolute_polarity
                 continue  # just here for the breakpoint
             elif s2.sid in positions and s1.sid not in positions:
-                positions[s1.sid], rotations[s1.sid][s2.sid] = orient(s2, s1)
+                relative_position, relative_rotation, relative_polarity = orient(s2, s1)
+                absolute_position, absolute_rotation, absolute_polarity = absolutify(
+                    relative_position,
+                    relative_rotation,
+                    relative_polarity,
+                    positions[s2.sid],
+                    rotations[s2.sid],
+                    polarities[s2.sid],
+                )
+                positions[s1.sid] = absolute_position
+                rotations[s1.sid] = absolute_rotation
+                polarities[s1.sid] = absolute_polarity
                 continue  # just here for the breakpoint
 
     raise NotImplementedError
