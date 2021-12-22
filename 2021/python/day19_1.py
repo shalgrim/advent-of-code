@@ -187,6 +187,34 @@ def absolutify(
     return out_position, out_rotation, out_polarity
 
 
+def absolutify_beacon(beacon, scanner_position, scanner_rotation, scanner_polarity):
+    absolute_position = []
+    for i in range(3):
+        absolute_position.append(
+            beacon[scanner_rotation[i]] * scanner_polarity[i] + scanner_position[i]
+        )
+    return tuple(absolute_position)
+
+
+def generate_all_beacons_with_absolute_coordinates(
+    scanners, positions, rotations, polarities
+):
+    all_beacons = []
+    for scanner_id, scanner in scanners.items():
+        scanner_position = positions[scanner_id]
+        scanner_rotation = rotations[scanner_id]
+        scanner_polarity = polarities[scanner_id]
+
+        for beacon in scanner.beacons.values():
+            all_beacons.append(
+                absolutify_beacon(
+                    beacon, scanner_position, scanner_rotation, scanner_polarity
+                )
+            )
+
+    return all_beacons
+
+
 def main(lines):
     scanners = process_input(lines)
     overlaps = []
@@ -207,7 +235,7 @@ def main(lines):
 
     while len(positions) < len(scanners):
         for overlap in overlaps:
-            # TODO: for every shared beacon add in the form:
+            # first idea: for every shared beacon add in the form:
             # (source_scanner_id, destination_scanner_id, source_beacon_id, destination_beacon_id)
             # and then what...?
             # it may make more sense to absolutely identify positions and orientations because
@@ -246,7 +274,10 @@ def main(lines):
                 polarities[s1.sid] = absolute_polarity
                 continue  # just here for the breakpoint
 
-    raise NotImplementedError
+    all_beacons = generate_all_beacons_with_absolute_coordinates(
+        scanners, positions, rotations, polarities
+    )
+    return len(set(all_beacons))
 
 
 if __name__ == '__main__':
