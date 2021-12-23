@@ -13,8 +13,6 @@ So you can make copies of universes with counts and go from there
 You will probably also need to consolidate based on scores and positions after each player's turn or after each round
 However, since we're only going to a total of 21, just managing the above might be enough
 """
-
-from collections import Counter
 from collections import defaultdict
 
 
@@ -46,8 +44,6 @@ def generate_roll(game_key):
     game_key_8 = generate_game_key(game_key, 8)
     game_key_9 = generate_game_key(game_key, 9)
 
-    # Counter would be perfect here if I had the docs
-    # upon further reflection it's probably unnecessary since incoming game key is always the same
     answer = defaultdict(int)
     answer[game_key_3] += 1
     answer[game_key_4] += 3
@@ -72,6 +68,7 @@ def main(p1_start, p2_start):
             if game_key[0] >= 21 or game_key[1] >= 21:
                 # this game is over, somebody has won
                 new_games[game_key] += game_count
+                continue
             for new_game_key, new_game_count in generate_roll(game_key).items():
                 new_games[new_game_key] += game_count * new_game_count
 
@@ -85,9 +82,5 @@ def main(p1_start, p2_start):
 
 if __name__ == '__main__':
     # 4, 8 is test input:
-    #   p1 wins 444_356_092_776_315 times
-    #   p2 wins 341_960_390_180_808 times
-    # but I got much higher numbers:
-    # (1737835340729268534253101094, 617915082342836639405918710)
     # 10, 8 is my actual input
-    print(main(4, 8))
+    print(main(10, 8))
