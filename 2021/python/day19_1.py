@@ -62,12 +62,15 @@ def determine_rotation(
 ):
     """given the same beacon same two scanners, gives the second scanner's rotation"""
     known_diff_magnitdues = [abs(v) for v in diffs_from_beacon_with_known_rotation]
+    rotated_known_diff_magnitudes = unrotate_and_polarize_beacon(
+        known_diff_magnitdues, known_rotation, (1, 1, 1)
+    )
     unknown_diff_magnitudes = [abs(v) for v in diffs_from_beacon_with_unknown_rotation]
 
     for rotation in Rotation:
         if (
             unrotate_and_polarize_beacon(unknown_diff_magnitudes, rotation, (1, 1, 1))
-            == known_diff_magnitdues
+            == rotated_known_diff_magnitudes
         ):
             return rotation
 
