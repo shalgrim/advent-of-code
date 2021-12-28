@@ -347,21 +347,10 @@ def absolutify_beacon(beacon, scanner_position, scanner_rotation, scanner_polari
     return tuple(absolute_position)
 
 
-def generate_all_beacons_with_absolute_coordinates(
-    scanners, positions, rotations, polarities
-):
+def generate_all_beacons_with_absolute_coordinates(scanners):
     all_beacons = []
     for scanner_id, scanner in scanners.items():
-        scanner_position = positions[scanner_id]
-        scanner_rotation = rotations[scanner_id]
-        scanner_polarity = polarities[scanner_id]
-
-        for beacon in scanner.beacons.values():
-            all_beacons.append(
-                absolutify_beacon(
-                    beacon, scanner_position, scanner_rotation, scanner_polarity
-                )
-            )
+        all_beacons.extend([tuple(scanner.absolutify_beacon_by_id(beacon_id)) for beacon_id in scanner.beacons])
 
     return all_beacons
 
@@ -386,12 +375,12 @@ def main(lines):
     scanners[0].rotation = Rotation.XYZ
     scanners[0].polarity = (1, 1, 1)
 
-    while not all(s.position for s in scanners):
+    while not all(s.position for s in scanners.values()):
         for overlap in overlaps:
             s1 = scanners[overlap[0]]
             s2 = scanners[overlap[1]]
 
-            if s1.sid.position and not s2.sid.position:
+            if s1.position and not s2.position:
                 s2.orient(s1)
                 continue  # just here for the breakpoint
             elif s2.position and not s1.position:

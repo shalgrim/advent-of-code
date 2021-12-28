@@ -68,7 +68,7 @@ def test_unrotate():
 
 
 def test_main1(test_input):
-    assert main1(test_input) == 78
+    assert main1(test_input) == 79
 
 
 def test_main1_in_pieces(test_input):
@@ -104,8 +104,6 @@ def test_main1_in_pieces(test_input):
     s4_absolute_beacons = {tuple(s4.absolutify_beacon_by_id(sid)) for sid in s4.beacons}
     assert s4_absolute_beacons.issuperset(ABSOLUTE_OVERLAPS_14)
     assert len(s4_absolute_beacons.intersection(ABSOLUTE_OVERLAPS_14)) == 12
-
-    # works up to here
 
     s2 = scanners[2]
     s2.orient(s4)
