@@ -73,6 +73,10 @@ def determine_rotation(
             == rotated_known_diff_magnitudes
         ):
             return rotation
+    else:
+        raise Exception(
+            f"Couldn't find rotation to match {diffs_from_beacon_with_known_rotation=} and {diffs_from_beacon_with_unknown_rotation=}"
+        )
 
 
 def determine_position(
@@ -204,6 +208,10 @@ class Scanner:
             source_beacons.append(self.beacons[source_beacon_id])
             other_beacons.append(other.beacons[other_beacon_id])
 
+        assert (
+            self.rotation is not None
+        ), "How did I get here with rotation not being assigned"
+
         unrotated_source_beacons = [
             unrotate_and_polarize_beacon(beacon, self.rotation, (1, 1, 1))
             for beacon in source_beacons
@@ -231,11 +239,6 @@ class Scanner:
         assert len(beacon_to_beacon_mapping) >= 12
         beacon_pairs = list(beacon_to_beacon_mapping.items())
         first_pair, second_pair = beacon_pairs[:2]
-
-        # if statement for debugging only
-        if self.sid == 4:
-            first_pair = (5, 19)
-            second_pair = (3, 24)
 
         beacon1_from_self = self.beacons[first_pair[0]]
         beacon1_from_other = other.beacons[first_pair[1]]
@@ -350,7 +353,12 @@ def absolutify_beacon(beacon, scanner_position, scanner_rotation, scanner_polari
 def generate_all_beacons_with_absolute_coordinates(scanners):
     all_beacons = []
     for scanner_id, scanner in scanners.items():
-        all_beacons.extend([tuple(scanner.absolutify_beacon_by_id(beacon_id)) for beacon_id in scanner.beacons])
+        all_beacons.extend(
+            [
+                tuple(scanner.absolutify_beacon_by_id(beacon_id))
+                for beacon_id in scanner.beacons
+            ]
+        )
 
     return all_beacons
 
@@ -381,11 +389,13 @@ def main(lines):
             s2 = scanners[overlap[1]]
 
             if s1.position and not s2.position:
+                print(f'orienting {s2.sid} based on {s1.sid}')
                 s2.orient(s1)
-                continue  # just here for the breakpoint
+                print(f'{s2.position} {s2.rotation} {s2.polarity}')
             elif s2.position and not s1.position:
+                print(f'orienting {s1.sid} based on {s2.sid}')
                 s1.orient(s2)
-                continue  # just here for the breakpoint
+                print(f'{s1.position} {s1.rotation} {s1.polarity}')
 
     all_beacons = generate_all_beacons_with_absolute_coordinates(scanners)
     return len(set(all_beacons))
