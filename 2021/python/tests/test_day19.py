@@ -6,7 +6,7 @@ from day19_1 import main as main1
 from day19_1 import process_input
 
 OVERLAPS = defaultdict(dict)
-OVERLAPS[0][1] = {
+OVERLAPS[0][1] = {  # as seen by scanner 0
     (-618, -824, -621),
     (-537, -823, -458),
     (-447, -329, 318),
@@ -58,6 +58,15 @@ def test_input():
         return [line.strip() for line in f.readlines()]
 
 
+def test_unrotate():
+    assert Rotation.unrotate([1, 2, 3], Rotation.XYZ) == [1, 2, 3]
+    assert Rotation.unrotate([1, 3, 2], Rotation.XZY) == [1, 2, 3]
+    assert Rotation.unrotate([2, 1, 3], Rotation.YXZ) == [1, 2, 3]
+    assert Rotation.unrotate([2, 3, 1], Rotation.YZX) == [1, 2, 3]
+    assert Rotation.unrotate([3, 1, 2], Rotation.ZXY) == [1, 2, 3]
+    assert Rotation.unrotate([3, 2, 1], Rotation.ZYX) == [1, 2, 3]
+
+
 def test_main1(test_input):
     assert main1(test_input) == 78
 
@@ -70,14 +79,16 @@ def test_main1_in_pieces(test_input):
     s1 = scanners[1]
     s0.position = (0, 0, 0)
     s0.rotation = Rotation.XYZ
+    s0.polarity = (1, 1, 1)
     assert s0.overlap_set(s1) == OVERLAPS[0][1]
     assert s1.overlap_set(s0) == OVERLAPS[1][0]
     s1.orient(s0)
+    assert s1.rotation == Rotation.XYZ
+    assert s1.polarity == (-1, 1, -1)
     assert s1.position == (68, -1246, -43)
-    assert s1.rotation == Rotation.X_YZ
     # s0.beacons[9] is the same beacon as s1.beacons[0]
-    assert s0.beacons[9] == s1.absolutify_beacon(0)
-    s1_absolute_beacons = {tuple(s1.absolutify_beacon(sid)) for sid in s1.beacons}
+    assert s0.beacons[9] == s1.absolutify_beacon_by_id(0)
+    s1_absolute_beacons = {tuple(s1.absolutify_beacon_by_id(sid)) for sid in s1.beacons}
     assert len(s1_absolute_beacons.intersection(OVERLAPS[0][1])) == 12
     assert s1_absolute_beacons.issuperset(OVERLAPS[0][1])
 
@@ -85,19 +96,25 @@ def test_main1_in_pieces(test_input):
     for beacon in ABSOLUTE_OVERLAPS_14:
         assert beacon in s1_absolute_beacons
 
-    # works up to here
-
     # orient s4 and confirm its position
     s4 = scanners[4]
     s4.orient(s1)
     assert s4.position == (-20, -1133, 1061)
 
-    # get overlap between s1 and s4 and assert that when absolutified they are ABSOLUTE_OVERLAPS_14
+    s4_absolute_beacons = {tuple(s4.absolutify_beacon_by_id(sid)) for sid in s4.beacons}
+    assert s4_absolute_beacons.issuperset(ABSOLUTE_OVERLAPS_14)
+    assert len(s4_absolute_beacons.intersection(ABSOLUTE_OVERLAPS_14)) == 12
+
+    # works up to here
 
     s2 = scanners[2]
     s2.orient(s4)
     assert s2.position == (1105, -1205, 1229)
 
+    # then check some absolutes? or relatives?
+
     s3 = scanners[3]
     s3.orient(s1)
     assert s3.position == (-92, -2380, -20)
+
+    # then check some absolutes? or relatives?
