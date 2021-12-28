@@ -375,14 +375,18 @@ def get_overlaps(scanners):
 
 
 def main(lines):
+    scanners = create_and_position_all_scanners(lines)
+    all_beacons = generate_all_beacons_with_absolute_coordinates(scanners)
+    return len(set(all_beacons))
+
+
+def create_and_position_all_scanners(lines):
     scanners = process_input(lines)
     overlaps = get_overlaps(scanners)
     print(f'{overlaps=}')
-
     scanners[0].position = (0, 0, 0)
     scanners[0].rotation = Rotation.XYZ
     scanners[0].polarity = (1, 1, 1)
-
     while not all(s.position for s in scanners.values()):
         for overlap in overlaps:
             s1 = scanners[overlap[0]]
@@ -396,9 +400,7 @@ def main(lines):
                 print(f'orienting {s1.sid} based on {s2.sid}')
                 s1.orient(s2)
                 print(f'{s1.position} {s1.rotation} {s1.polarity}')
-
-    all_beacons = generate_all_beacons_with_absolute_coordinates(scanners)
-    return len(set(all_beacons))
+    return scanners
 
 
 if __name__ == '__main__':
