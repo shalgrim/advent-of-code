@@ -7,7 +7,7 @@ def number_generator(start_from=0):
         yield num
 
 
-def run_program(lines, number):
+def run_program(lines, number, bad_starts):
     input_index = 0
     registers = {'w': 0, 'x': 0, 'y': 0, 'z': 0}
 
@@ -28,10 +28,12 @@ def run_program(lines, number):
                 output = val1 * val2
             elif command == 'div':
                 if val2 == 0:
+                    bad_starts.add(str(number)[:input_index])
                     raise ZeroDivisionError
                 output = val1 // val2
             elif command == 'mod':
                 if val1 < 0 or val2 <= 0:
+                    bad_starts.add(str(number)[:input_index])
                     raise ZeroDivisionError('Invalid mod operation')
                 output = val1 % val2
             else:
@@ -42,10 +44,18 @@ def run_program(lines, number):
     return registers['z']
 
 
+def has_bad_start(number, bad_starts):
+    string_number = str(number)
+    return any(string_number.startswith(start) for start in bad_starts)
+
+
 def main(lines, start_from=0):
+    bad_starts = set()
     for number in number_generator(start_from=start_from):
+        if has_bad_start(number, bad_starts):
+            continue
         try:
-            program_output = run_program(lines, number)
+            program_output = run_program(lines, number, bad_starts)
         except ZeroDivisionError:
             continue
         else:
