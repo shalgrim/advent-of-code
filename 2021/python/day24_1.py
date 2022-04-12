@@ -1,12 +1,10 @@
 from itertools import product
 
 
-def number_generator():
-    digits = '987654321'
-    sub_generator = product(digits, repeat=14)
-
-    for subg in sub_generator:
-        yield int(''.join(list(subg)))
+def number_generator(start_from=0):
+    starting_number = start_from if start_from else 99_999_999_999_999
+    for num in range(starting_number, 0, -1):
+        yield num
 
 
 def run_program(lines, number):
@@ -44,8 +42,8 @@ def run_program(lines, number):
     return registers['z']
 
 
-def main(lines):
-    for number in number_generator():
+def main(lines, start_from=0):
+    for number in number_generator(start_from=start_from):
         try:
             program_output = run_program(lines, number)
         except ZeroDivisionError:
@@ -53,7 +51,7 @@ def main(lines):
         else:
             if number % 9999 == 0:
                 print(f'{number=}: {program_output=}')
-            if run_program(lines, number) == 0:
+            if program_output == 0:
                 return number
     return -1
 
@@ -62,4 +60,4 @@ if __name__ == '__main__':
     with open('../data/input24.txt') as f:
         lines = [line.strip() for line in f.readlines()]
 
-    print(main(lines))
+    print(main(lines, start_from=99999837226179))
