@@ -1,4 +1,4 @@
-from itertools import product
+BOOKMARK_FN = '../data/day24_bookmark.txt'
 
 
 def number_generator(start_from=0):
@@ -10,6 +10,7 @@ def number_generator(start_from=0):
 def update_bad_starts(bad_starts, number, input_index):
     """Updates bad_starts via side-effect to remove newly unnecessary strings"""
     new_bad_start = str(number)[:input_index]
+    print(f'adding {new_bad_start=}')
 
     bad_starts.difference_update(
         {bs for bs in bad_starts if bs.startswith(new_bad_start)}
@@ -58,25 +59,48 @@ def has_bad_start(number, bad_starts):
     return any(string_number.startswith(start) for start in bad_starts)
 
 
-def main(lines, start_from=0):
-    bad_starts = set()
-    for number in number_generator(start_from=start_from):
-        if has_bad_start(number, bad_starts):
-            continue
-        try:
-            program_output = run_program(lines, number, bad_starts)
-        except ZeroDivisionError:
-            continue
-        else:
-            if number % 9999 == 0:
-                print(f'{number=}: {program_output=}')
-            if program_output == 0:
-                return number
+def main(lines, start_from=0, known_bad_starts=None):
+    bad_starts = known_bad_starts if known_bad_starts is not None else set()
+    try:
+        for number in number_generator(start_from=start_from):
+            if has_bad_start(number, bad_starts):
+                continue
+            try:
+                program_output = run_program(lines, number, bad_starts)
+            except ZeroDivisionError:
+                continue
+            else:
+                if number % 9999 == 0:
+                    print(f'{number=}: {program_output=}')
+                if program_output == 0:
+                    return number
+    except KeyboardInterrupt:
+        print('keyboard interrupt')
+        outlines = [str(number) + '\n']
+        outlines += [f'{bs}\n' for bs in bad_starts]
+        print(f'{bad_starts=}')
+        with open(BOOKMARK_FN, 'w') as f:
+            f.writelines(outlines)
+        print('re-raising')
+        raise
     return -1
 
 
 if __name__ == '__main__':
     with open('../data/input24.txt') as f:
-        lines = [line.strip() for line in f.readlines()]
+        program_lines = [line.strip() for line in f.readlines()]
 
-    print(main(lines, start_from=99999834456456))
+    stored_bad_starts = None
+    with open(BOOKMARK_FN) as f:
+        lines = [line.strip() for line in f.readlines()]
+        stored_start_from = int(lines[0]) if lines else 0
+        stored_bad_starts = set(lines[1:]) if len(lines) > 1 else None
+
+    # 99999834456456
+    print(
+        main(
+            program_lines,
+            start_from=stored_start_from,
+            known_bad_starts=stored_bad_starts,
+        )
+    )
