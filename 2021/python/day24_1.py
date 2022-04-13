@@ -7,6 +7,12 @@ def number_generator(start_from=0):
         yield num
 
 
+def update_bad_starts(bad_starts, number, input_index):
+    """Updates bad_starts via side-effect to remove newly unnecessary strings"""
+    new_bad_start = str(number)[:input_index]
+    bad_starts.difference_update({bs for bs in bad_starts if bs.startswith(new_bad_start)})
+
+
 def run_program(lines, number, bad_starts):
     input_index = 0
     registers = {'w': 0, 'x': 0, 'y': 0, 'z': 0}
@@ -28,12 +34,12 @@ def run_program(lines, number, bad_starts):
                 output = val1 * val2
             elif command == 'div':
                 if val2 == 0:
-                    bad_starts.add(str(number)[:input_index])
+                    update_bad_starts(bad_starts, number, input_index)
                     raise ZeroDivisionError
                 output = val1 // val2
             elif command == 'mod':
                 if val1 < 0 or val2 <= 0:
-                    bad_starts.add(str(number)[:input_index])
+                    update_bad_starts(bad_starts, number, input_index)
                     raise ZeroDivisionError('Invalid mod operation')
                 output = val1 % val2
             else:
@@ -70,4 +76,4 @@ if __name__ == '__main__':
     with open('../data/input24.txt') as f:
         lines = [line.strip() for line in f.readlines()]
 
-    print(main(lines, start_from=99999837226179))
+    print(main(lines, start_from=99999834456456))
