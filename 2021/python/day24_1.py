@@ -9,12 +9,13 @@ def number_generator(start_from=0):
 
 def update_bad_starts(bad_starts, number, input_index):
     """Updates bad_starts via side-effect to remove newly unnecessary strings"""
+    if input_index == 14:
+        return
     new_bad_start = str(number)[:input_index]
-    print(f'adding {new_bad_start=}')
-
     bad_starts.difference_update(
         {bs for bs in bad_starts if bs.startswith(new_bad_start)}
     )
+    bad_starts.add(new_bad_start)
 
 
 def run_program(lines, number, bad_starts):
