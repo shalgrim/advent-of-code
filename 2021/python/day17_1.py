@@ -6,18 +6,19 @@ def is_past_target(x, x1):
     return x > x1
 
 
-def hits_target(xvel, yvel, x0, x1, y0, y1):
+def hits_target(init_xvel, init_yvel, x0, x1, y0, y1):
     t = 0
     x = 0
     y = 0
-    max_y = y
+    xvel = init_xvel
+    yvel = init_yvel
 
     while not is_past_target(x, x1):
         if is_in_target(x, y, x0, x1, y0, y1):
             return 0
         elif xvel == 0 and x < x0:
             return -1
-        elif xvel == 0 and x < x1 and yvel < 0 and y < y1:
+        elif xvel == 0 and x < x1 and yvel < 0 and y < y0:
             return -1
         else:
             x += xvel
@@ -78,8 +79,60 @@ def main(text):
     return convert_initial_y_vel_to_max_height(max_y_vel)
 
 
-if __name__ == '__main__':
+def will_land_in_range(init_yvel, y1, y0):
+    y = 0
+    yvel = init_yvel
+    while y >= y0:
+        if y <= y1:
+            return True
+        y += yvel
+        yvel -= 1
+    return False
+
+
+# can I turn this into some solvable formula?
+# if so, then I can solve for max initial_velocity using -140 <= height <= -89
+# Gaussian formula says (n / 2)(first number + last number) = sum, where n is the number of integers
+# and of course n is first - last + 1
+# oh duh that makes total sense for when there's an odd number because first and last will add up to an even number...sigh
+def height(initial_velocity, t):
+    first = initial_velocity
+    last = initial_velocity - t + 1
+    median = 0 if (first - last) % 2 == 1 else (first + last) // 2
+    return (first + last) * (t // 2) + median
+
+
+def height_gaussian(initial_velocity, t):
+    """A more straightforward way of calculating height"""
+    n = t + 1
+    final_velocity = initial_velocity - t
+    return n * (initial_velocity + final_velocity) / 2
+
+
+def height_gaussian_refactored(initial_velocity, t):
+    """Wrote this just to make it purely a function of those two variables"""
+    return (t + 1) * (2 * initial_velocity - t) / 2
+
+
+def main2():
+    for i in range(100_000):
+        if will_land_in_range(i, -89, -140):
+            print(i, convert_initial_y_vel_to_max_height(i))
+    print('fin')
+
+
+if __name__ == '__main__':  # 9591 is too low
+    # Ugh, I'd like to find the biggest initial velocity that lands at each point -89 to -140
+    # then take the max of those values
+    # and finding the maximum height reached by that initial velocity is trivial
+    # but how do you maximize initial velocity? Seems like you could just keep searching higher and higher and eventually
+    # you'd find another one that lands on that number
+    # so we need to find max(initial_velocity) where height_gaussian(initial_velocity, t) == -89
+    # and how the heck would i do that?
+    # Wait, does it turn into a quadratic equation? No, cuz it has two variables
+    # start here next https://www.reddit.com/r/adventofcode/comments/rily4v/2021_day_17_part_2_never_brute_force_when_you_can/
     with open('../data/input17.txt') as f:
         txt = f.read().strip()
 
-    print(main(txt))
+    # print(main(txt))
+    main2()
