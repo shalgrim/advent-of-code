@@ -22,7 +22,11 @@ def run_program(lines, number, bad_starts):
     input_index = 0
     registers = {'w': 0, 'x': 0, 'y': 0, 'z': 0}
 
-    for line in lines:
+    for line_num, line in enumerate(lines, 1):
+        # assertions that my analysis to short-circuit things is correct
+        if line_num == 19:
+            assert int(str(number)[0]) + 3 == registers['z'] == registers['y']
+
         command = line.split()[0]
         if command == 'inp':
             variable = line.split()[1]
