@@ -1,3 +1,19 @@
+TEST_INPUT = 'target area: x=20..30, y=-10..-5'
+REAL_INPUT = 'target area: x=117..164, y=-140..-89'
+
+
+def sub_parser(block):
+    strings = block[2:].split('..')
+    return int(strings[0]), int(strings[1])
+
+
+def input_parser(txt):
+    _, _, xblock, yblock = txt.split()
+    left, right = sub_parser(xblock[:-1])
+    bottom, top = sorted(sub_parser(yblock))
+    return left, right, top, bottom
+
+
 def is_in_target(x, y, x0, x1, y0, y1):
     return x0 <= x <= x1 and y0 <= y <= y1
 
@@ -84,6 +100,7 @@ def will_land_in_range(init_yvel, y1, y0):
     yvel = init_yvel
     while y >= y0:
         if y <= y1:
+            # print(y)
             return True
         y += yvel
         yvel -= 1
@@ -114,11 +131,11 @@ def height_gaussian_refactored(initial_velocity, t):
     return (t + 1) * (2 * initial_velocity - t) / 2
 
 
-def main2():
-    for i in range(100_000):
-        if will_land_in_range(i, -89, -140):
-            print(i, convert_initial_y_vel_to_max_height(i))
-    print('fin')
+def main2(y1, y2):
+    for i in range(-y2):
+        if will_land_in_range(i, y1, y2):
+            answer = convert_initial_y_vel_to_max_height(i)
+    return answer
 
 
 if __name__ == '__main__':  # 9591 is too low
@@ -135,4 +152,4 @@ if __name__ == '__main__':  # 9591 is too low
         txt = f.read().strip()
 
     # print(main(txt))
-    main2()
+    main2(-89, -140)
