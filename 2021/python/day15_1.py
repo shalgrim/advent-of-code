@@ -13,7 +13,7 @@ class PathFinder:
     def __init__(self, grid):
         self.grid = grid
         self.target = (len(grid) - 1, len(grid[-1]) - 1)
-        self.shortest_known_path = 1180
+        self.shortest_known_path = 3068
         self.shortest_from = {(self.target[0], self.target[1]): 0}
 
     def get_neighbors(self, position):
