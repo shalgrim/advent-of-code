@@ -25,7 +25,9 @@ def run_program(lines, number, bad_starts):
     for line_num, line in enumerate(lines, 1):
         # assertions that my analysis to short-circuit things is correct
         if line_num == 19:
-            assert int(str(number)[0]) + 3 == registers['z'] == registers['y']
+            assert (
+                int(str(number)[0]) + 3 == registers['z'] == registers['y']
+            ), f'these should all be equal: {int(str(number)[0]) + 3}, {registers["z"]}, {registers["y"]}'
 
         command = line.split()[0]
         if command == 'inp':
