@@ -3,15 +3,15 @@ def process_instructions(stacks, lines):
         if not line:
             break
 
-    for line in lines[i+1:]:
+    for line in lines[i + 1 :]:
         words = line.split()
         num_to_move = int(words[1])
         from_stack = int(words[3]) - 1
         to_stack = int(words[5]) - 1
 
-        for _ in range(num_to_move):
-            element = stacks[from_stack].pop()
-            stacks[to_stack].append(element)
+        elements = stacks[from_stack][-num_to_move:]
+        stacks[from_stack] = stacks[from_stack][:-num_to_move]
+        stacks[to_stack].extend(elements)
 
 
 def main(lines):
