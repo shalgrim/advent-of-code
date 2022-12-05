@@ -3,7 +3,7 @@ def process_instructions(stacks, lines):
         if not line:
             break
 
-    for line in lines[i+1:]:
+    for line in lines[i + 1 :]:
         words = line.split()
         num_to_move = int(words[1])
         from_stack = int(words[3]) - 1
@@ -12,6 +12,17 @@ def process_instructions(stacks, lines):
         for _ in range(num_to_move):
             element = stacks[from_stack].pop()
             stacks[to_stack].append(element)
+
+
+def build_stacks(lines):
+    for i, line in enumerate(lines):
+        if not line:
+            break
+    number_line = lines[i - 1]
+    num_stacks = int(number_line.split()[-1])
+    stacks = [list() for _ in range(num_stacks)]
+    for line_index in range(i - 2, -1, -1):
+        pass  # TODO: process each line going backward
 
 
 def main(lines):
