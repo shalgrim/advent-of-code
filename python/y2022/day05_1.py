@@ -22,23 +22,17 @@ def build_stacks(lines):
     num_stacks = int(number_line.split()[-1])
     stacks = [list() for _ in range(num_stacks)]
     for line_index in range(i - 2, -1, -1):
-        pass  # TODO: process each line going backward
+        for i, c in enumerate(lines[line_index]):
+            if ord('A') <= ord(c) <= ord('Z'):
+                # figure out what stack it goes in
+                stack_index = i // 4
+                stacks[stack_index].append(c)
+
+    return stacks
 
 
 def main(lines):
-    # stacks = build_stacks(lines)
-    stacks = [
-        ['C', 'Z', 'N', 'B', 'M', 'W', 'Q', 'V'],
-        list('HZRWCB'),
-        list('FQRJ'),
-        list('ZSWHFNMT'),
-        list('GFWLNQP'),
-        list('LPW'),
-        list('VBDRGCQJ'),
-        list('ZONBW'),
-        list('HLFCGTJ'),
-    ]
-    # stacks = [['Z', 'N'], ['M', 'C', 'D'], ['P']]
+    stacks = build_stacks(lines)
     process_instructions(stacks, lines)
     answer = ''.join(stack[-1] for stack in stacks)
     return answer
@@ -46,5 +40,5 @@ def main(lines):
 
 if __name__ == '__main__':
     with open('../../data/2022/input05.txt') as f:
-        lines = [line.strip() for line in f.readlines()]
+        lines = [line.rstrip() for line in f.readlines()]
     print(main(lines))

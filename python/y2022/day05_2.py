@@ -1,3 +1,6 @@
+from y2022.day05_1 import build_stacks
+
+
 def process_instructions(stacks, lines):
     for i, line in enumerate(lines):
         if not line:
@@ -15,19 +18,7 @@ def process_instructions(stacks, lines):
 
 
 def main(lines):
-    # stacks = build_stacks(lines)
-    stacks = [
-        ['C', 'Z', 'N', 'B', 'M', 'W', 'Q', 'V'],
-        list('HZRWCB'),
-        list('FQRJ'),
-        list('ZSWHFNMT'),
-        list('GFWLNQP'),
-        list('LPW'),
-        list('VBDRGCQJ'),
-        list('ZONBW'),
-        list('HLFCGTJ'),
-    ]
-    # stacks = [['Z', 'N'], ['M', 'C', 'D'], ['P']]
+    stacks = build_stacks(lines)
     process_instructions(stacks, lines)
     answer = ''.join(stack[-1] for stack in stacks)
     return answer
@@ -35,5 +26,5 @@ def main(lines):
 
 if __name__ == '__main__':
     with open('../../data/2022/input05.txt') as f:
-        lines = [line.strip() for line in f.readlines()]
+        lines = [line.rstrip() for line in f.readlines()]
     print(main(lines))
