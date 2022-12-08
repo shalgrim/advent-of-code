@@ -1,4 +1,4 @@
-from day07_1 import build_dirs
+from y2022.day07_1 import build_dirs
 
 TOTAL_DISK_SPACE_AVAILABLE = 70_000_000
 NEEDED_UNUSED_SPACE = 30_000_000
