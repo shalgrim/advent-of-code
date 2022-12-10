@@ -1,5 +1,4 @@
 import pytest
-import os
 from y2022.day07_1 import main as main1
 from y2022.day07_2 import main as main2
 
