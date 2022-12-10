@@ -1,24 +1,5 @@
 def main(lines):
-    cycle = 1
-    x = 1
-    x_vals = [x]
-
-    for line in lines:
-        instruction = line.split()[0]
-        if instruction == 'addx':
-            value = int(line.split()[1])
-            x_vals.append(x)
-            cycle += 1
-            x += value
-            x_vals.append(x)
-            cycle += 1
-        else:
-            x_vals.append(x)
-            cycle += 1
-
-    print(f'{cycle=}')
-    for i, x in enumerate(x_vals):
-        print(i, x)
+    x_vals = get_x_vals(lines)
 
     print(f'{x_vals[19]=}')
     print(f'{x_vals[59]=}')
@@ -35,6 +16,28 @@ def main(lines):
         + 180 * x_vals[179]
         + 220 * x_vals[219]
     )
+
+
+def get_x_vals(lines):
+    cycle = 1
+    x = 1
+    x_vals = [x]
+    for line in lines:
+        instruction = line.split()[0]
+        if instruction == 'addx':
+            value = int(line.split()[1])
+            x_vals.append(x)
+            cycle += 1
+            x += value
+            x_vals.append(x)
+            cycle += 1
+        else:
+            x_vals.append(x)
+            cycle += 1
+    print(f'{cycle=}')
+    for i, x in enumerate(x_vals):
+        print(i, x)
+    return x_vals
 
 
 if __name__ == '__main__':
