@@ -1,8 +1,5 @@
-from copy import copy
-
-
 class Monkey:
-    def __init__(self):
+    def __init__(self, worry_level_management):
         self.items = []
         self.operator = None
         self.operand = None
@@ -10,6 +7,7 @@ class Monkey:
         self.true_throw = -1
         self.false_throw = -1
         self.num_inspections = 0
+        self.worry_level_management = worry_level_management
 
     def __str__(self):
         return f'Monkey N: {self.items}'
@@ -26,7 +24,7 @@ class Monkey:
             else:
                 raise ValueError(f'Unknown operator {self.operator}')
 
-            new_val //= 3
+            new_val //= self.worry_level_management
 
             if new_val % self.test_divisor == 0:
                 throws.append(self.true_throw)
@@ -39,13 +37,13 @@ class Monkey:
         return throws
 
 
-def build_monkeys(lines):
+def build_monkeys(lines, worry_level_management=3):
     monkeys = []
     for line in lines:
         if not line:
             continue
         elif line.startswith('Monkey'):
-            monkey = Monkey()
+            monkey = Monkey(worry_level_management)
         elif line.startswith('Starting items'):
             items = line.split(': ')[1]
             list_of_items = [int(item) for item in items.split(',')]
@@ -76,9 +74,11 @@ def run_round(monkeys):
             monkeys[throw].items.append(monkey.items.pop(0))
 
 
-def main(lines):
-    monkeys = build_monkeys(lines)
-    for _ in range(20):
+def main(lines, num_rounds=20, worry_level_management=3):
+    monkeys = build_monkeys(lines, worry_level_management)
+    for round_num in range(num_rounds):
+        if round_num % 100 == 0:
+            print(f'{round_num=}')
         run_round(monkeys)
     sorted_monkeys = sorted(monkeys, key=lambda m: m.num_inspections, reverse=True)
     return sorted_monkeys[0].num_inspections * sorted_monkeys[1].num_inspections
