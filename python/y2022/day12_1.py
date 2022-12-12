@@ -69,13 +69,15 @@ def main(lines):
     return moves
 
 
-def bfs_to_dest(grid, search_start=None):
+def bfs_to_dest(grid, search_start=None, known_shortest=math.inf):
     current_position = grid.start if search_start is None else search_start
     moves = 0
     states = {current_position}  # contains all the positions I'm in at the current move
     visited = {current_position}
     while grid.dest not in visited:
         moves += 1
+        if moves > known_shortest:
+            return known_shortest
         new_states = set()
         for position in states:
             for move in grid.possible_moves(position):
