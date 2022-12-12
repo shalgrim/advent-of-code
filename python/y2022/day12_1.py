@@ -65,7 +65,23 @@ def build_grid(lines):
 def main(lines):
     grid = build_grid(lines)
     visited = defaultdict(lambda: math.inf)
-    return grid.search(grid.start, 0, visited)
+    # return grid.search(grid.start, 0, visited)  # DFS
+    current_position = grid.start
+    moves = 0
+    states = {current_position}  # contains all the positions I'm in at the current move
+    visited = {current_position}
+
+    while grid.dest not in visited:
+        moves += 1
+        new_states = set()
+        for position in states:
+            for move in grid.possible_moves(position):
+                if move not in visited:
+                    new_states.add(move)
+        visited.update(new_states)
+        states = new_states
+
+    return moves
 
 
 if __name__ == '__main__':
