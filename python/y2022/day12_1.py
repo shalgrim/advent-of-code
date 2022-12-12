@@ -64,13 +64,16 @@ def build_grid(lines):
 
 def main(lines):
     grid = build_grid(lines)
-    visited = defaultdict(lambda: math.inf)
-    # return grid.search(grid.start, 0, visited)  # DFS
-    current_position = grid.start
+    moves = bfs_to_dest(grid)
+
+    return moves
+
+
+def bfs_to_dest(grid, search_start=None):
+    current_position = grid.start if search_start is None else search_start
     moves = 0
     states = {current_position}  # contains all the positions I'm in at the current move
     visited = {current_position}
-
     while grid.dest not in visited:
         moves += 1
         new_states = set()
@@ -80,7 +83,6 @@ def main(lines):
                     new_states.add(move)
         visited.update(new_states)
         states = new_states
-
     return moves
 
 
