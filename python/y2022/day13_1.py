@@ -1,3 +1,6 @@
+from itertools import zip_longest
+
+
 def build_packets(lines):
     packets = []
     for i in range(0, len(lines), 3):
@@ -17,41 +20,38 @@ def in_correct_order(p1, p2):
         else:
             return -1
     elif isinstance(p1, list) and isinstance(p2, list):
-        for e1, e2 in zip(p1, p2):
+        for e1, e2 in zip_longest(p1, p2):
+            if e1 is None:
+                return True
+            if e2 is None:
+                return False
             element_answer = in_correct_order(e1, e2)
             if element_answer == -1:
                 continue
             return element_answer
-        if len(p1) < len(p2):
-            return True
-        elif len(p2) > len(p1):
-            return False
-        else:
-            return -1
+        return -1
     elif isinstance(p1, list):
-        for e1, e2 in zip(p1, [p2]):
+        for e1, e2 in zip_longest(p1, [p2]):
+            if e1 is None:
+                return True
+            if e2 is None:
+                return False
             element_answer = in_correct_order(e1, e2)
             if element_answer == -1:
                 continue
             return element_answer
-        if len(p1) > 1:
-            return False
-        elif len(p1) == 1:
-            return -1
-        else:
-            return False
+        return -1
     else:  # p1 is int, p2 is list
-        for e1, e2 in zip([p1], p2):
+        for e1, e2 in zip_longest([p1], p2):
+            if e1 is None:
+                return True
+            if e2 is None:
+                return False
             element_answer = in_correct_order(e1, e2)
             if element_answer == -1:
                 continue
             return element_answer
-        if len(p2) > 1:
-            return True
-        elif len(p2) == 1:
-            return -1
-        else:
-            return False
+        return -1
 
 
 def main(lines):
@@ -68,7 +68,7 @@ def main(lines):
     return sum(packet_indexes_in_correct_order)
 
 
-if __name__ == '__main__':  # 6639 is wrong
-    with open('../../data/2022/test13.txt') as f:
+if __name__ == '__main__':
+    with open('../../data/2022/input13.txt') as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
