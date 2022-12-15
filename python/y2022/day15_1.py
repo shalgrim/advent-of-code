@@ -85,6 +85,8 @@ def main(lines, y):
 
 
 if __name__ == '__main__':
-    with open('../../data/2022/test15.txt') as f:
+    # with open('../../data/2022/test15.txt') as f:
+    with open('../../data/2022/input15.txt') as f:
         lines = [line.strip() for line in f.readlines()]
-    print(main(lines, 10))
+    # print(main(lines, 10))
+    print(main(lines, 2_000_000))
