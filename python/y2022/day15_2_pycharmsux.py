@@ -13,7 +13,7 @@ def main(lines, max_val):
         all_impossibles = all_impossibles.union({(x, y) for x in impossibles})
     for x in range(max_val):
         for y in range(max_val):
-            if (x, y) not in all_impossibles:
+            if (x, y) not in all_impossibles and (x, y) not in all_known_beacons:
                 return x, y
 
 
