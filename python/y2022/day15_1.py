@@ -13,7 +13,10 @@ class Sensor:
     def impossibles(self, y, all_known_beacons):
         distance_to_row = abs(self.y - y)
         if self.distance_to_closest_beacon < distance_to_row:
-            return set()
+            leftover_distance = self.distance_to_closest_beacon - distance_to_row
+            return set(
+                range(self.x - leftover_distance, self.x + leftover_distance + 1)
+            )
         if self.distance_to_closest_beacon == distance_to_row:
             if self.beacon_y == y:
                 return set()
@@ -76,12 +79,17 @@ def build_sensors(lines):
 def main(lines, y):
     sensors = build_sensors(lines)
     all_known_beacons = [(s.beacon_x, s.beacon_y) for s in sensors]
+    answer = get_impossibles(sensors, all_known_beacons, y)
+
+    return len(answer)
+
+
+def get_impossibles(sensors, all_known_beacons, y):
     the_impossibles = [sensor.impossibles(y, all_known_beacons) for sensor in sensors]
     answer = set()
     for impossible in the_impossibles:
         answer = answer.union(impossible)
-
-    return len(answer)
+    return answer
 
 
 if __name__ == '__main__':
