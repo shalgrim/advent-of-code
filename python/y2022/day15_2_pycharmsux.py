@@ -7,9 +7,6 @@ def main(lines, max_val):
     all_impossibles = set()
     for y in range(max_val+1):
         print(f'{y=}')
-        # current issue is that for y == 0 the logic says any x is possible, no impossibles for any sensor, which what?
-        # easiest counterexample there is that there's a sensor at 2, 0 that detects a beacon at 2, 10
-        # that's a distance of 8. So there should be no possible beacons at anything on row 0 where x >= 10
         impossibles = get_impossibles(sensors, all_known_beacons, y)
         all_impossibles = all_impossibles.union({(x, y) for x in impossibles})
     for x in range(max_val):
