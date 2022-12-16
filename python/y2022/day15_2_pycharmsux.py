@@ -17,6 +17,7 @@ def main(lines, max_val):
 
 
 if __name__ == '__main__':
+    # Status: There are certainly performance gains to be made by just being more efficient down these calls; I suspect it requires a different algorithm altogether tho
     # with open('../../data/2022/test15.txt') as f:
     with open('../../data/2022/input15.txt') as f:
         lines = [line.strip() for line in f.readlines()]
