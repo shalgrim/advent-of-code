@@ -3,7 +3,14 @@ from typing import Dict, List
 
 class Robot:
     def __init__(self, produces: str, costs: Dict[str, int]):
-        pass
+        self.produces = produces
+        self.costs = costs
+
+    def __str__(self):
+        answer = f'produces: {self.produces}; costs:'
+        for k, v in self.costs.items():
+            answer += f'{v} {k}, '
+        return answer[:-2]
 
 
 class Blueprint:
@@ -26,9 +33,14 @@ class Blueprint:
 
 
 def maximize_geodes(blueprint, minutes):
+    resources = {}
     time_passed = 0
+    robots = [Robot('ore', {})]
     while time_passed < minutes:
-        pass
+        for robot in robots:
+            resources[robot.produces] += 1
+        # I feel like I need a State class, and at each point through this loop I can
+        # create all the options of states, but hoo boy
 
 
 def main(lines: List[str]):
