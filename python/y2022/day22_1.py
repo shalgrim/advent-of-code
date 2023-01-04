@@ -60,6 +60,8 @@ def get_next_tile(map, location, direction):
         else:
             uppermost_y = min(k[1] for k in map.keys() if k[0] == location[0])
             return location[0], uppermost_y
+    else:
+        raise ValueError(f'Unknown Direction {direction}')
 
 
 def move(map, location, direction, magnitude):
@@ -74,7 +76,12 @@ def move(map, location, direction, magnitude):
 
 
 def get_new_direction(direction, turn):
-    inc_or_dec = 1 if turn == 'R' else -1
+    if turn == 'R':
+        inc_or_dec = 1
+    elif turn == 'L':
+        inc_or_dec = -1
+    else:
+        raise ValueError(f"Invalid turn {turn}")
     new_value = direction.value + inc_or_dec
     return Direction(new_value % 4)
 
@@ -95,6 +102,8 @@ def main(lines):
 
 
 if __name__ == '__main__':
-    with open('../../data/2022/test22.txt') as f:  # 149258 is too high for actual input
+    with open(
+        '../../data/2022/input22.txt'
+    ) as f:  # 149258 is too high for actual input
         lines = [line.rstrip() for line in f.readlines()]
     print(main(lines))
