@@ -17,7 +17,7 @@ def parse_input(lines):
             if c in ['.', '#']:
                 map[(x, y)] = c
 
-    raw_instructions = lines[-1]
+    raw_instructions = lines[-1].strip()
     stored_value = 0
     path = []
     for c in raw_instructions:
@@ -86,6 +86,15 @@ def get_new_direction(direction, turn):
     return Direction(new_value % 4)
 
 
+def get_last_magnitude(line):
+    value = 0
+    for c in line[::-1]:
+        try:
+            value = value * 10 + int(c)
+        except ValueError:
+            return value
+
+
 def main(lines):
     map, path = parse_input(lines)
     location = get_start_location(map)
@@ -95,6 +104,9 @@ def main(lines):
         location = move(map, location, direction, magnitude)
         direction = get_new_direction(direction, turn)
 
+    last_magnitude = get_last_magnitude(lines[-1].strip())
+    location = move(map, location, direction, last_magnitude)
+
     final_row = location[1] + 1
     final_column = location[0] + 1
     final_facing = direction.value
@@ -102,8 +114,6 @@ def main(lines):
 
 
 if __name__ == '__main__':
-    with open(
-        '../../data/2022/input22.txt'
-    ) as f:  # 149258 is too high for actual input
-        lines = [line.rstrip() for line in f.readlines()]
+    with open('../../data/2022/input22.txt') as f:
+        lines = f.readlines()
     print(main(lines))
