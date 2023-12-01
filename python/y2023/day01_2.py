@@ -13,9 +13,18 @@ converter = {
     "nine": 9,
 }
 
+def really_find_all(line):
+    answer = []
+    match = pattern.search(line, 0)
+    while match:
+        answer.append(match.group())
+        match = pattern.search(line, match.start()+1)
+    return answer
+
 
 def get_last_number(line):
-    raw = pattern.findall(line)[-1]
+    # raw = pattern.findall(line)[-1]
+    raw = really_find_all(line)[-1]
     print(raw)
     try:
         return int(raw)

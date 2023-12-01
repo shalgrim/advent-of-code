@@ -1,6 +1,6 @@
 import pytest
 from y2023.day01_1 import main
-from y2023.day01_2 import main as main2
+from y2023.day01_2 import main as main2, calibration_value
 
 
 @pytest.fixture
@@ -14,6 +14,10 @@ def test_input_2():
     with open("../../../data/2023/test01_2.txt") as f:
         return [line.strip() for line in f.readlines()]
 
+
+def test_calibration_value_part_2():
+    line = "126dzbvg6two4oneightntd"
+    assert calibration_value(line) == 18
 
 def test_part_1(test_input):
     assert main(test_input) == 142
