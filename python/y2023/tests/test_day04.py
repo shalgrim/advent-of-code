@@ -10,7 +10,7 @@ def test_input():
 
 
 def test_part_1(test_input):
-    assert main(test_input) == None
+    assert main(test_input) == 13
 
 
 def test_part_2(test_input):
