@@ -38,8 +38,8 @@ def mega_convert(num, maps):
     return num
 
 
-def main(lines):
-    seeds = get_seeds(lines[0])
+def main(lines, seed_builder):
+    seeds = seed_builder(lines[0])
     maps = build_maps(lines[2:])
     return min(mega_convert(seed, maps) for seed in seeds)
 
@@ -47,4 +47,4 @@ def main(lines):
 if __name__ == "__main__":
     with open("../../data/2023/input05.txt") as f:
         lines = [line.strip() for line in f.readlines()]
-    print(main(lines))
+    print(main(lines, get_seeds))
