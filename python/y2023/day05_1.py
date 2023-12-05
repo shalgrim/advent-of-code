@@ -40,8 +40,10 @@ def mega_convert(num, maps):
 
 def main(lines, seed_builder):
     seeds = seed_builder(lines[0])
+    seed_set = set(seeds)
+    print(f"{len(seed_set)=}")
     maps = build_maps(lines[2:])
-    return min(mega_convert(seed, maps) for seed in seeds)
+    return min(mega_convert(seed, maps) for seed in seed_set)
 
 
 if __name__ == "__main__":

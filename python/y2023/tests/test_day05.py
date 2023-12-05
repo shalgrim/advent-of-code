@@ -1,6 +1,6 @@
 import pytest
 
-from y2023.day05_1 import main
+from y2023.day05_1 import main, get_seeds
 from y2023.day05_2 import main as main2
 
 @pytest.fixture
@@ -10,9 +10,9 @@ def test_input():
 
 
 def test_part_1(test_input):
-    assert main(test_input) == 35
+    assert main(test_input, get_seeds) == 35
 
 
 def test_part_2(test_input):
-    assert main2(test_input) == 30
+    assert main2(test_input) == 46
 
