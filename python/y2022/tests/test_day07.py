@@ -5,13 +5,13 @@ from y2022.day07_2 import main as main2
 
 @pytest.fixture
 def tst_input():
-    with open('../../data/2022/test07.txt') as f:
+    with open('../../data/2022/test06.txt') as f:
         return [line.strip() for line in f.readlines()]
 
 
 @pytest.fixture
 def puzzle_input():
-    with open('../../data/2022/input07.txt') as f:
+    with open('../../data/2022/input06.txt') as f:
         return [line.strip() for line in f.readlines()]
 
 

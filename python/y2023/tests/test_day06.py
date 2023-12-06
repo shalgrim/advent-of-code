@@ -10,7 +10,7 @@ def test_input():
 
 
 def test_part_1(test_input):
-    assert main(test_input) == 35
+    assert main(test_input) == 288
 
 
 def test_part_2(test_input):

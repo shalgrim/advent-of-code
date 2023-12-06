@@ -11,6 +11,6 @@ def main(txt):
 
 
 if __name__ == '__main__':
-    with open('../data/input07.txt') as f:
+    with open('../data/input06.txt') as f:
         txt = f.read()
     print(main(txt))
