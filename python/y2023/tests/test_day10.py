@@ -1,5 +1,5 @@
 import pytest
-from y2023.day10_1 import generate_loop, get_possible_s_shapes, get_sloc, main
+from y2023.day10_1 import generate_loop, get_possible_s_shapes, main
 from y2023.day10_2 import main as main2
 
 
@@ -90,4 +90,4 @@ def test_part_2(test_input3, test_input4, test_input5, test_input6):
     assert main2(test_input3) == 4
     assert main2(test_input4) == 4
     assert main2(test_input5) == 8
-    # assert main2(test_input6) == 10
+    assert main2(test_input6, "../../../data/2023/test10_clean_map6.txt") == 10
