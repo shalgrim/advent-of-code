@@ -13,6 +13,15 @@ from y2023.day10_1 import generate_loop
 
 # If you're always going from left to right, the only items you'll see first are |, F, and L
 
+# Tests are working but getting wrong answer still
+# Which may get me stuck
+# One thing I might consider doing is
+# making the map twice as big by turning "||" into "|.|" and "--" into "---" and so on
+# both horizontally and vertically figuring out what should go in between
+# then do some flood filling...mark every space next to a wall as O and then everything next
+# to an O as an O until you stop adding
+# Then what's left are I except only odd rows and columns
+
 
 def generate_clean_map(s_shape, loop, lines, outfile=None):
     outlines = []
@@ -68,7 +77,8 @@ def main(lines, outfn=None, enclosfn=None):
 
             if len(matches) % 2 == 1:
                 enclosed_points.add((x, y))
-    print_with_enclosures(map, enclosed_points, enclosfn)
+    if enclosfn:
+        print_with_enclosures(map, enclosed_points, enclosfn)
     return len(enclosed_points)
 
 
