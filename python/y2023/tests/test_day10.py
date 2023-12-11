@@ -1,7 +1,6 @@
 import pytest
 from y2023.day10_1 import generate_loop, get_possible_s_shapes, get_sloc, main
-
-# from y2023.day10_2 import main as main2
+from y2023.day10_2 import main as main2
 
 
 @pytest.fixture
@@ -13,6 +12,30 @@ def test_input1():
 @pytest.fixture
 def test_input2():
     with open("../../../data/2023/test10_2.txt") as f:
+        return [line.strip() for line in f.readlines()]
+
+
+@pytest.fixture
+def test_input3():
+    with open("../../../data/2023/test10_3.txt") as f:
+        return [line.strip() for line in f.readlines()]
+
+
+@pytest.fixture
+def test_input4():
+    with open("../../../data/2023/test10_4.txt") as f:
+        return [line.strip() for line in f.readlines()]
+
+
+@pytest.fixture
+def test_input5():
+    with open("../../../data/2023/test10_5.txt") as f:
+        return [line.strip() for line in f.readlines()]
+
+
+@pytest.fixture
+def test_input6():
+    with open("../../../data/2023/test10_6.txt") as f:
         return [line.strip() for line in f.readlines()]
 
 
@@ -63,6 +86,8 @@ def test_part_1(test_input1, test_input2):
     assert main(test_input2) == 8
 
 
-def test_part_2(test_input):
-    assert False
-    # assert main2(test_input) == 2
+def test_part_2(test_input3, test_input4, test_input5, test_input6):
+    assert main2(test_input3) == 4
+    assert main2(test_input4) == 4
+    assert main2(test_input5) == 8
+    # assert main2(test_input6) == 10
