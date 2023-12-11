@@ -90,4 +90,11 @@ def test_part_2(test_input3, test_input4, test_input5, test_input6):
     assert main2(test_input3) == 4
     assert main2(test_input4) == 4
     assert main2(test_input5) == 8
-    assert main2(test_input6, "../../../data/2023/test10_clean_map6.txt") == 10
+    assert (
+        main2(
+            test_input6,
+            "../../../data/2023/test10_clean_map6.txt",
+            "../../../data/2023/test10_clean_map6_enclose.txt",
+        )
+        == 10
+    )

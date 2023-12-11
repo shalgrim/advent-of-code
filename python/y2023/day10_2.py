@@ -34,7 +34,24 @@ def generate_clean_map(s_shape, loop, lines, outfile=None):
     return outlines
 
 
-def main(lines, outfn=None):
+def print_with_enclosures(map, enclosed_points, enclosfn):
+    lines_to_write = []
+    for y, line in enumerate(map):
+        outline = ""
+        for x, char in enumerate(line):
+            if (x, y) in enclosed_points:
+                assert char == "."
+                outline += "I"
+            else:
+                outline += char
+        outline += "\n"
+        lines_to_write.append(outline)
+    if enclosfn:
+        with open(enclosfn, "w") as f:
+            f.writelines(lines_to_write)
+
+
+def main(lines, outfn=None, enclosfn=None):
     s_shape, loop = generate_loop(lines)
     map = generate_clean_map(s_shape, loop, lines, outfn)
     points_of_loop = set(loop)
@@ -51,6 +68,7 @@ def main(lines, outfn=None):
 
             if len(matches) % 2 == 1:
                 enclosed_points.add((x, y))
+    print_with_enclosures(map, enclosed_points, enclosfn)
     return len(enclosed_points)
 
 
@@ -58,4 +76,10 @@ if __name__ == "__main__":  # 454 is too high
     sys.setrecursionlimit(20000)
     with open("../../data/2023/input10.txt") as f:
         lines = [line.strip() for line in f.readlines()]
-    print(main(lines))
+    print(
+        main(
+            lines,
+            "../../data/2023/output10_2.txt",
+            "../../data/2023/output10_2_enclosed.txt",
+        )
+    )
