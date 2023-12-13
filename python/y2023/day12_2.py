@@ -18,8 +18,9 @@ def is_possible(new_springs, nums):
     )
 
 
-def _get_num_arrangements(springs, nums, num_to_place, possibilities):
+def _get_arrangements(springs, nums, num_to_place):
     # TODO: Maybe consider caching search space...there will almost certainly be some repeats, right?
+    answer = set()
 
     unknown_indexes = [i for i, spring in enumerate(springs) if spring == "?"]
     for j, index in enumerate(unknown_indexes):
@@ -30,7 +31,7 @@ def _get_num_arrangements(springs, nums, num_to_place, possibilities):
         if num_to_place == len(unknown_indexes[j:]):
             newer_springs = new_springs.replace("?", "#")
             if is_possible(newer_springs, nums):
-                possibilities.add(newer_springs)
+                answer.add(newer_springs)
             break
 
         if is_possible(new_springs, nums):
@@ -39,31 +40,31 @@ def _get_num_arrangements(springs, nums, num_to_place, possibilities):
                     "Shouldn't ever be here with checking first on num_to_place equalling number of ?"
                 )
                 # we finished with the last hook
-                possibilities.add(new_springs)
+                answer.add(new_springs)
                 continue
             elif num_to_place == 1:
                 # we're placing the last unknown, so put all the rest to "." and check it
                 newest_springs = new_springs.replace("?", ".")
                 if is_possible(newest_springs, nums):
-                    possibilities.add(newest_springs)
+                    answer.add(newest_springs)
                     continue
             else:
-                _get_num_arrangements(
-                    new_springs, nums, num_to_place - 1, possibilities
-                )
+                holding = _get_arrangements(new_springs, nums, num_to_place - 1)
+                answer.update(holding)
         else:
             continue
+
+    return answer
 
 
 def get_num_arrangements(line):
     """Idea behind this one is to recursively find possibilities with an early exit"""
-    possibilities = set()
     springs, nums = line.split()
     nums = [int(num) for num in nums.split(",")]
     given_damaged = springs.count("#")
     known_damaged = sum(nums)
     num_to_place = known_damaged - given_damaged
-    _get_num_arrangements(springs, nums, num_to_place, possibilities)
+    possibilities = _get_arrangements(springs, nums, num_to_place)
     return len(possibilities)
 
 
