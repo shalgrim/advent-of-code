@@ -1,3 +1,4 @@
+import functools
 import re
 
 from tqdm import tqdm
@@ -18,8 +19,8 @@ def is_possible(new_springs, nums):
     )
 
 
+@functools.cache
 def _get_arrangements(springs, nums, num_to_place):
-    # TODO: Maybe consider caching search space...there will almost certainly be some repeats, right?
     answer = set()
 
     unknown_indexes = [i for i, spring in enumerate(springs) if spring == "?"]
@@ -36,12 +37,10 @@ def _get_arrangements(springs, nums, num_to_place):
 
         if is_possible(new_springs, nums):
             if "?" not in new_springs:
+                # we finished with the last hook
                 raise RuntimeError(
                     "Shouldn't ever be here with checking first on num_to_place equalling number of ?"
                 )
-                # we finished with the last hook
-                answer.add(new_springs)
-                continue
             elif num_to_place == 1:
                 # we're placing the last unknown, so put all the rest to "." and check it
                 newest_springs = new_springs.replace("?", ".")
@@ -64,7 +63,7 @@ def get_num_arrangements(line):
     given_damaged = springs.count("#")
     known_damaged = sum(nums)
     num_to_place = known_damaged - given_damaged
-    possibilities = _get_arrangements(springs, nums, num_to_place)
+    possibilities = _get_arrangements(springs, tuple(nums), num_to_place)
     return len(possibilities)
 
 

@@ -49,11 +49,6 @@ def test_get_num_arrangements2(test_input):
     assert get_num_arrangements2(convert_row(test_input[4])) == 2500
 
 
-def test_get_num_arrangements2_long(test_input):
-    """Takes 10.5 seconds"""
-    assert get_num_arrangements2(convert_row(test_input[5])) == 506_250
-
-
 def test_convert_row():
     assert convert_row(".# 1") == ".#?.#?.#?.#?.# 1,1,1,1,1"
     assert (
@@ -66,6 +61,15 @@ def test_part_1(test_input):
     assert main(test_input) == 21
 
 
+# I did something with caching wrong
+# because whichever of these tests runs first takes longer
+# but then the second one is instantaneous
+# That's the case no matter the order they're in
 def test_part_2(test_input):
     """Takes nearly 11 seconds"""
     assert main2(test_input) == 525152
+
+
+def test_get_num_arrangements2_long(test_input):
+    """Takes 10.5 seconds"""
+    assert get_num_arrangements2(convert_row(test_input[5])) == 506_250
