@@ -1,5 +1,7 @@
 import re
 
+from tqdm import tqdm
+
 
 def convert_row(line):
     springs, nums = line.split()
@@ -33,12 +35,13 @@ def _get_num_arrangements(springs, nums, num_to_place, possibilities):
 
         if is_possible(new_springs, nums):
             if "?" not in new_springs:
-                raise RuntimeError("Shouldn't ever be here with checking first on num_to_place equalling number of ?")
+                raise RuntimeError(
+                    "Shouldn't ever be here with checking first on num_to_place equalling number of ?"
+                )
                 # we finished with the last hook
                 possibilities.add(new_springs)
                 continue
             elif num_to_place == 1:
-
                 # we're placing the last unknown, so put all the rest to "." and check it
                 newest_springs = new_springs.replace("?", ".")
                 if is_possible(newest_springs, nums):
@@ -66,11 +69,14 @@ def get_num_arrangements(line):
 
 def main(lines):
     converted_lines = [convert_row(line) for line in lines]
-    possible_arrangements = [get_num_arrangements(line) for line in converted_lines]
+    possible_arrangements = []
+    for converted_line in tqdm(converted_lines):
+        num = get_num_arrangements(converted_line)
+        possible_arrangements.append(num)
     return sum(possible_arrangements)
 
 
-if __name__ == "__main__":  # So this might take a few hours
+if __name__ == "__main__":  # So this might take a few hours...never got done with line 5...next steps: refactor so it returns a set instead of updating th eone passed in and then use functools.cache
     with open("../../data/2023/input12.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
