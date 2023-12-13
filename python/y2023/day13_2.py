@@ -65,7 +65,8 @@ def score_map(map):
                 else:
                     print("What case didn't I consider 3?")
             else:
-                return answer
+                if smudged:
+                    return answer
         else:
             for i, right_index in enumerate(range(answer, len(map[0]))):
                 left_index = right_index - 1 - 2 * i
@@ -83,7 +84,8 @@ def score_map(map):
                 else:
                     print("What case didn't I consider 4?")
             else:
-                return answer
+                if smudged:
+                    return answer
     raise RuntimeError("No solution found")
 
 
