@@ -11,6 +11,7 @@ def convert_row(line):
     return " ".join([new_springs, new_nums])
 
 
+@functools.cache
 def is_possible(new_springs, nums):
     damaged_blocks = re.findall("#+", new_springs.split("?")[0])
     return (
@@ -54,6 +55,58 @@ def _get_arrangements(springs, nums, num_to_place):
             continue
 
     return answer
+
+
+def get_num_leading_hashes(s):
+    return (re.match('#+').group())
+    pass
+
+
+
+# Consider a new algorithm something like this:
+# Look at first character
+# If it is a ., just remove all the consecutive .s and recurse
+# If it is a #
+#   remove consecutive hashes
+#   and subtract that number from first number in nums
+#   but pop it if it's 0
+#   and return if it's < 0
+#   then recurse
+# If it is a ?,
+#   change it to a . and recurse
+#   change it to a # and recurse
+# The trick here is my base case and how I add everything up
+# The base case must be, what, I have no string and nums is an empty list?
+# and if that's the case I return True?
+# But how do I keep track of the sum?
+# Try when you branch, putting into a list of two and then summing up that answer at the end
+@functools.cache
+def _get_num_arrangements_proper_recursion(springs, nums):
+    if not springs and not nums:
+        return 1
+    next_char = springs[0]
+
+    if next_char == '.':
+        new_springs = springs.lstrip('.')
+        return _get_num_arrangements_proper_recursion(new_springs, nums)
+    elif next_char == '#':
+        # TODO: this part
+        # oh there are lots of different cases here like
+        # what happens if it matches exactly but there's a ? at the end then that has to be a .
+        # maybe just pull off one then subtract 1 from first num
+        # but if it's already at 1 then check next char and if # return 0 but if ? then change it to a . and remove num
+        # ...
+        # no wait, just subtract one and move on, but at the top of this function I should check if nums[0] == 0
+        # and if so, and if leading is hash do x if it's hook do y blah blah
+        num_leading_hashes = len(re.match('#+', springs).group())
+    elif next_char == '?':
+        as_dot = _get_num_arrangements_proper_recursion("." + springs[1:], nums)
+        as_hash = _get_num_arrangements_proper_recursion("#" + springs[1:], nums)
+        return as_dot + as_hash
+    else:
+        raise RuntimeError("Unknown character {}".format(next_char))
+
+
 
 
 def get_num_arrangements(line):
