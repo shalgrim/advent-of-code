@@ -12,6 +12,20 @@ def calc_focusing_power(boxes):
     return answer
 
 
+def format_box(k, v):
+    return f"[{k} {v}]"
+
+
+def print_boxes(boxes):
+    for i in range(256):
+        if i not in boxes:
+            continue
+        box_contents = boxes[i]
+        outline = f"Box {i}: "
+        outline += ' '.join([f"[{k} {v}]" for k, v in box_contents.items()])
+        print(outline)
+
+
 def main(text):
     steps = text.split(",")
     boxes = defaultdict(dict)
@@ -24,12 +38,17 @@ def main(text):
             label, focal_length = step.split("=")
             box = hash(label)
             boxes[box][label] = int(focal_length)
+        # input("Go to next step")
+        # print(f'After "{step}":')
+        # print_boxes(boxes)
+        # print()
 
     answer = calc_focusing_power(boxes)
     return answer
 
 
 if __name__ == "__main__":  # 226357 is wrong
+    # main("rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7")
     with open("../../data/2023/input15.txt") as f:
         txt = f.read().strip()
     print(main(txt))
