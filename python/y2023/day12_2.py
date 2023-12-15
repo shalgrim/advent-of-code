@@ -58,9 +58,8 @@ def _get_arrangements(springs, nums, num_to_place):
 
 
 def get_num_leading_hashes(s):
-    return (re.match('#+').group())
+    return re.match("#+").group()
     pass
-
 
 
 # Consider a new algorithm something like this:
@@ -81,15 +80,33 @@ def get_num_leading_hashes(s):
 # But how do I keep track of the sum?
 # Try when you branch, putting into a list of two and then summing up that answer at the end
 @functools.cache
-def _get_num_arrangements_proper_recursion(springs, nums):
-    if not springs and not nums:
-        return 1
-    next_char = springs[0]
+def _get_num_arrangements_proper_recursion(springs, nums, mid_block=False):
+    post_block = False
 
-    if next_char == '.':
-        new_springs = springs.lstrip('.')
-        return _get_num_arrangements_proper_recursion(new_springs, nums)
-    elif next_char == '#':
+    # No springs, so if numbers is also empty we found one
+    if not springs:
+        return 1 if not nums or nums == (0,) else 0
+
+    # We do have springs left, so as long as it's all . and ? we're okay
+    if not nums or nums == (0,):
+        return 1 if "#" not in springs else 0
+
+    next_char = springs[0]
+    if nums[0] == 0:
+        if next_char == "#":
+            return 0
+        else:
+            nums = nums[1:]
+            mid_block = False
+            post_block = True
+
+    if next_char == ".":
+        if mid_block:
+            return 0
+        else:
+            new_springs = springs.lstrip(".")
+            return _get_num_arrangements_proper_recursion(new_springs, nums, False)
+    elif next_char == "#":
         # TODO: this part
         # oh there are lots of different cases here like
         # what happens if it matches exactly but there's a ? at the end then that has to be a .
@@ -98,15 +115,29 @@ def _get_num_arrangements_proper_recursion(springs, nums):
         # ...
         # no wait, just subtract one and move on, but at the top of this function I should check if nums[0] == 0
         # and if so, and if leading is hash do x if it's hook do y blah blah
-        num_leading_hashes = len(re.match('#+', springs).group())
-    elif next_char == '?':
-        as_dot = _get_num_arrangements_proper_recursion("." + springs[1:], nums)
-        as_hash = _get_num_arrangements_proper_recursion("#" + springs[1:], nums)
+        # but what if I have #? and the number 2
+        # then I subtract 1 and go into the next step with ? and the number 1
+        # and I'll do my ? step not knowing that it MUST be a #
+        # so let's try this mid_block argument
+
+        # num_leading_hashes = len(re.match("#+", springs).group())
+
+        nums = (nums[0]-1, *nums[1:])
+        return _get_num_arrangements_proper_recursion(springs[1:], nums, True)
+
+
+    elif next_char == "?":
+        as_dot = (
+            0
+            if mid_block or post_block
+            else _get_num_arrangements_proper_recursion("." + springs[1:], nums, False)
+        )
+        as_hash = _get_num_arrangements_proper_recursion(
+            "#" + springs[1:], nums, mid_block
+        )
         return as_dot + as_hash
     else:
         raise RuntimeError("Unknown character {}".format(next_char))
-
-
 
 
 def get_num_arrangements(line):
@@ -116,8 +147,10 @@ def get_num_arrangements(line):
     given_damaged = springs.count("#")
     known_damaged = sum(nums)
     num_to_place = known_damaged - given_damaged
-    possibilities = _get_arrangements(springs, tuple(nums), num_to_place)
-    return len(possibilities)
+    # possibilities = _get_arrangements(springs, tuple(nums), num_to_place)
+    # return len(possibilities)
+    answer = _get_num_arrangements_proper_recursion(springs, tuple(nums))
+    return answer
 
 
 def main(lines):
@@ -129,7 +162,9 @@ def main(lines):
     return sum(possible_arrangements)
 
 
-if __name__ == "__main__":  # So this might take a few hours...never got done with line 5...next steps: refactor so it returns a set instead of updating th eone passed in and then use functools.cache
+if (
+    __name__ == "__main__"
+):  # So this might take a few hours...never got done with line 5...next steps: refactor so it returns a set instead of updating th eone passed in and then use functools.cache
     with open("../../data/2023/input12.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
