@@ -4,7 +4,7 @@ from y2023.day15_1 import hash
 
 def calc_focusing_power(boxes):
     answer = 0
-    for i in range(1, 256):
+    for i in range(1, 257):
         box_contents = boxes[i - 1]
         for j, val in enumerate(box_contents.values(), start=1):
             answer += i * j * val
@@ -21,9 +21,10 @@ def print_boxes(boxes):
         if i not in boxes:
             continue
         box_contents = boxes[i]
-        outline = f"Box {i}: "
-        outline += ' '.join([f"[{k} {v}]" for k, v in box_contents.items()])
-        print(outline)
+        if box_contents:
+            outline = f"Box {i}: "
+            outline += ' '.join([f"[{k} {v}]" for k, v in box_contents.items()])
+            print(outline)
 
 
 def main(text):
@@ -43,6 +44,7 @@ def main(text):
         # print_boxes(boxes)
         # print()
 
+    print_boxes(boxes)
     answer = calc_focusing_power(boxes)
     return answer
 

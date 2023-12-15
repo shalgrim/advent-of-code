@@ -1,4 +1,3 @@
-import pytest
 from y2023.day15_1 import hash, main
 from y2023.day15_2 import main as main2
 
