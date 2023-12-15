@@ -45,23 +45,26 @@ def test_get_num_arrangements2(test_input):
 
     # building up to get_num_arrangements2(test_input[1])
     assert get_num_arrangements2("..........?##. 3") == 1
+
+    # breaking up that first broken, all four of these work
     assert get_num_arrangements2(".#...#....?##. 1,1,3") == 1
     assert get_num_arrangements2("..#...#...?##. 1,1,3") == 1
     assert get_num_arrangements2(".#....#...?##. 1,1,3") == 1
     assert get_num_arrangements2("..#..#....?##. 1,1,3") == 1
-    # assert get_num_arrangements2(".#?..#?...?##. 1,1,3") == 1  # broken
+    assert get_num_arrangements2(".#...?#...?##. 1,1,3") == 1
+    assert get_num_arrangements2("..#..#?...?##. 1,1,3") == 1
+    assert get_num_arrangements2(".#?..#?...?##. 1,1,3") == 1
     assert get_num_arrangements2(".?#..?#...?##. 1,1,3") == 1
-    # assert get_num_arrangements2(".#?..?#...?##. 1,1,3") == 1  # broken
-    # assert get_num_arrangements2(".#?..#?...?##. 1,1,3") == 1  # broken
-    # so what is broken about those three cases...that's what's NEXT
+    assert get_num_arrangements2(".#?..?#...?##. 1,1,3") == 1
+    assert get_num_arrangements2(".#?..#?...?##. 1,1,3") == 1
 
-    # assert get_num_arrangements2(test_input[1]) == answers[1]
-    # assert [get_num_arrangements2(line) for line in test_input] == answers
-    # assert get_num_arrangements2(convert_row(test_input[0])) == 1
-    # assert get_num_arrangements2(convert_row(test_input[1])) == 16_384
-    # assert get_num_arrangements2(convert_row(test_input[2])) == 1
-    # assert get_num_arrangements2(convert_row(test_input[3])) == 16
-    # assert get_num_arrangements2(convert_row(test_input[4])) == 2500
+    assert get_num_arrangements2(test_input[1]) == answers[1]
+    assert [get_num_arrangements2(line) for line in test_input] == answers
+    assert get_num_arrangements2(convert_row(test_input[0])) == 1
+    assert get_num_arrangements2(convert_row(test_input[1])) == 16_384
+    assert get_num_arrangements2(convert_row(test_input[2])) == 1
+    assert get_num_arrangements2(convert_row(test_input[3])) == 16
+    assert get_num_arrangements2(convert_row(test_input[4])) == 2500
 
 
 def test_convert_row():

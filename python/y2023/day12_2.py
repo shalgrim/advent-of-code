@@ -122,18 +122,21 @@ def _get_num_arrangements_proper_recursion(springs, nums, mid_block=False):
 
         # num_leading_hashes = len(re.match("#+", springs).group())
 
-        nums = (nums[0]-1, *nums[1:])
+        nums = (nums[0] - 1, *nums[1:])
         return _get_num_arrangements_proper_recursion(springs[1:], nums, True)
-
 
     elif next_char == "?":
         as_dot = (
             0
-            if mid_block or post_block
+            if mid_block
             else _get_num_arrangements_proper_recursion("." + springs[1:], nums, False)
         )
-        as_hash = _get_num_arrangements_proper_recursion(
-            "#" + springs[1:], nums, mid_block
+        as_hash = (
+            0
+            if post_block
+            else _get_num_arrangements_proper_recursion(
+                "#" + springs[1:], nums, mid_block
+            )
         )
         return as_dot + as_hash
     else:
@@ -162,9 +165,7 @@ def main(lines):
     return sum(possible_arrangements)
 
 
-if (
-    __name__ == "__main__"
-):  # So this might take a few hours...never got done with line 5...next steps: refactor so it returns a set instead of updating th eone passed in and then use functools.cache
+if __name__ == "__main__":
     with open("../../data/2023/input12.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
