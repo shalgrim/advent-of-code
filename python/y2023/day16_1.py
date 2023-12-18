@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 
 class Direction(Enum):
@@ -99,14 +99,20 @@ class Beam:
 
 
 class Map:
-    def __init__(self, lines: List[str]):
+    def __init__(
+        self,
+        lines: List[str],
+        x1: Optional[int] = 0,
+        y1: Optional[int] = 0,
+        d1: Optional[Direction] = Direction.RIGHT,
+    ):
         self.lines = lines
         self.height = len(lines)
         self.width = len(lines[0])
-        self.beams = [Beam(0, 0, Direction.RIGHT, self)]
+        self.beams = [Beam(x1, y1, d1, self)]
         if self.beams[0].should_turn():
             self.beams[0].turn()
-        self.energized_cells = set([(0, 0)])
+        self.energized_cells = set([(x1, y1)])
 
     def move_beams(self):
         new_beams = []
@@ -122,8 +128,7 @@ class Map:
         return frozenset(Beam.processed_states)
 
     def move_beam(self, beam):
-        # Set this up so it's always pointing where it needs to go
-        # then if it can't move, just leave it
+        # Set this up so it's always pointing where it needs to go # then if it can't move, just leave it
         # if it can move forward, move it forward and when you land on the next step
         # turn it if it should turn and split it if it should split
         if not beam.can_move():
@@ -137,8 +142,8 @@ class Map:
             return None
 
 
-def main(lines):
-    map = Map(lines)
+def main(lines, x1=0, y1=0, d1=Direction.RIGHT):
+    map = Map(lines, x1, y1, d1)
     seen_states = set()
     seen_states.add(map.state)
     map.move_beams()
