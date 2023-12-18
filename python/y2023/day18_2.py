@@ -1,4 +1,6 @@
 def main(lines):
+    # TODO: Convert the map to the same map from day 10 and then solve on that map
+    # Eh, I don't think that will work
     pass
 
 

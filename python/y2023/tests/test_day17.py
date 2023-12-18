@@ -13,9 +13,9 @@ def test_part_1(test_input):
     assert main(["3"]) == 0
     assert main(["35", "33"]) == 6
     assert main(["563", "735", "533"]) == 15
-    # NEXT: I have the breakpoints set up to investigate this v failure
     assert main(["6453", "5563", "7735", "5533"]) == 23
-    # assert main(test_input) == 102
+    # assert main(["86887", "86453", "65563", "87735", "55533"]) == "??"  # currently getting 35, is that right?
+    assert main(test_input) == 102
 
 
 def test_part_2(test_input):
