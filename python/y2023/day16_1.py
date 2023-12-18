@@ -106,7 +106,7 @@ class Map:
         self.beams = [Beam(0, 0, Direction.RIGHT, self)]
         if self.beams[0].should_turn():
             self.beams[0].turn()
-        self.energized_cells = set((0, 0))
+        self.energized_cells = set([(0, 0)])
 
     def move_beams(self):
         new_beams = []
