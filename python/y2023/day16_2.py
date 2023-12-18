@@ -14,9 +14,9 @@ def main(lines):
     """
     best_answer = 0
 
-    # STATUS (grid is 110x110)
-    #  Through: DOWN 52
-    #  Best: 7916
+    # STATUS (grid is 110x110, 12,110 cells)
+    #  Through: LEFT 75
+    #  Best: 7987
     print("DOWN")
     for x in range(len(lines[0])):
         print(f"{x=}, {best_answer=}")
