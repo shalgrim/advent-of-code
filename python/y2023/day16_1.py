@@ -10,6 +10,8 @@ class Direction(Enum):
 
 
 class Beam:
+    processed_states = set()
+
     def __init__(self, x: int, y: int, direction: Direction, map):
         self.x = x
         self.y = y
@@ -17,6 +19,8 @@ class Beam:
         self.map = map
 
     def can_move(self):
+        if self.state in self.processed_states:
+            return False
         if self.direction == Direction.RIGHT and self.x == self.map.width - 1:
             return False
         if self.direction == Direction.DOWN and self.y == self.map.height - 1:
@@ -91,6 +95,7 @@ class Beam:
             self.y -= 1
         else:
             raise RuntimeError("Invalid direction")
+        self.processed_states.add(self.state())
 
 
 class Map:
@@ -114,7 +119,7 @@ class Map:
 
     @property
     def state(self):
-        return frozenset(beam.state() for beam in self.beams)
+        return frozenset(Beam.processed_states)
 
     def move_beam(self, beam):
         # Set this up so it's always pointing where it needs to go
@@ -145,7 +150,7 @@ def main(lines):
     return len(map.energized_cells)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # 7789 is too high
     with open("../../data/2023/input16.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
