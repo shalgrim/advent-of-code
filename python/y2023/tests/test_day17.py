@@ -15,6 +15,9 @@ def test_part_1(test_input):
     assert main(["563", "735", "533"]) == 15
     assert main(["6453", "5563", "7735", "5533"]) == 23
     # assert main(["86887", "86453", "65563", "87735", "55533"]) == "??"  # currently getting 35, is that right?
+
+
+def test_part_1_full(test_input):
     # NEXT: argh! off by 1, getting 101
     # the only way I can think to debug is to be able to figure out what route it took
     # Well, they should all be within visited, so I should be able to figure it out

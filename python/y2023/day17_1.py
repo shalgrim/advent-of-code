@@ -218,6 +218,7 @@ def main(lines):
         ]
         # TODO: check for an empty list, though that should be not possible if I do my termination correction
         current_node = possible_next_current[0]
+        print(current_node)
         for neighbor in get_neighbors(current_node, unvisited_nodes):
             cost = costs[neighbor.y][neighbor.x]
             neighbor.distance = min(neighbor.distance, current_node.distance + cost)
