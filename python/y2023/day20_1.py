@@ -70,6 +70,16 @@ class NullModule(Module):
         return []
 
 
+class RxModule(Module):
+    def __init__(self, machine):
+        self.machine = machine
+
+    def send(self, signal, *args):
+        if signal == "lo":
+            self.machine.turn_on()
+        return []
+
+
 def make_module(line):
     rule_input, output = line.split(" -> ")
     if rule_input == "broadcaster":
@@ -101,12 +111,17 @@ def make_modules(lines):
 class Machine:
     def __init__(self, lines):
         self.modules = make_modules(lines)
+        self.modules["rx"] = RxModule(self)
         self.lo_sent = 0
         self.hi_sent = 0
+        self.on = False
 
     @property
     def state(self):
         return tuple([module.state for module in self.modules.values()])
+
+    def turn_on(self):
+        self.on = True
 
     def push_button(self):
         lo_sent = 0
@@ -171,10 +186,13 @@ def main(lines):
         seen_states[state] = i
         lo_sent, hi_sent = machine.push_button()
         sent_counts.append((lo_sent, hi_sent))
-    # do something with i and seen_states[machine.state]
-    total_lo_sent, total_hi_sent = calc_final(
-        i, machine.state, seen_states, sent_counts
-    )
+    if i < 999:
+        total_lo_sent, total_hi_sent = calc_final(
+            i, machine.state, seen_states, sent_counts
+        )
+    else:
+        total_lo_sent = sum(sc[0] for sc in sent_counts)
+        total_hi_sent = sum(sc[1] for sc in sent_counts)
     return total_lo_sent * total_hi_sent
 
 
