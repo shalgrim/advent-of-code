@@ -116,10 +116,11 @@ def build_nodes(width, height):
             if x == 0 and y == 0:
                 nodes[(0, 0, "", 0)] = Node(x, y, "", 0, 0)
             else:
-                possible_downs = min(y, 3)
-                possible_ups = min(height - y - 1, 3)
+                possible_ups = min(y, 3)
+                possible_downs = min(height - y - 1, 3)
                 possible_lefts = min(x, 3)
                 possible_rights = min(width - x - 1, 3)
+
                 for i in range(1, possible_downs + 1):
                     node = Node(x, y, "D", i, math.inf)
                     nodes[node.key] = node
@@ -145,7 +146,7 @@ def get_neighbors(node, nodes):
         else:
             key = None
     else:
-        key = (node.x - 1, node.y, "L", 1)
+        key = (node.x + 1, node.y, "L", 1)
     answer.append(nodes.get(key))
 
     # get down neighbor
@@ -165,7 +166,7 @@ def get_neighbors(node, nodes):
         else:
             key = None
     else:
-        key = (node.x, node.y + 1, "R", 1)
+        key = (node.x-1, node.y, "R", 1)
     answer.append(nodes.get(key))
 
     # get up neighbor
@@ -181,7 +182,7 @@ def get_neighbors(node, nodes):
     return [a for a in answer if a]  # remove Nones
 
 
-def unfinished(unvisited_nodes, target_keys):
+def finished(unvisited_nodes, target_keys):
     if not unvisited_nodes:
         return True
     if not set(unvisited_nodes.keys()).intersection(target_keys):
@@ -202,7 +203,7 @@ def main(lines):
     target_keys = {
         key
         for key in unvisited_nodes.keys()
-        if key[0] == len(lines[0] - 1) and key[1] == len(lines) - 1
+        if key[0] == len(lines[0]) - 1 and key[1] == len(lines) - 1
     }
     for neighbor in get_neighbors(current_node, unvisited_nodes):
         cost = costs[neighbor.y][neighbor.x]
@@ -210,7 +211,7 @@ def main(lines):
     visited_nodes[current_node.key] = current_node
     del unvisited_nodes[current_node.key]
 
-    while unfinished(unvisited_nodes, target_keys):
+    while not finished(unvisited_nodes, target_keys):
         min_distance = min(node.distance for node in unvisited_nodes.values())
         possible_next_current = [
             node for node in unvisited_nodes.values() if node.distance == min_distance
@@ -220,7 +221,7 @@ def main(lines):
         for neighbor in get_neighbors(current_node, unvisited_nodes):
             cost = costs[neighbor.y][neighbor.x]
             neighbor.distance = min(neighbor.distance, current_node.distance + cost)
-        visited_nodes.add(current_node)
+        visited_nodes[current_node.key] = current_node
         del unvisited_nodes[current_node.key]
 
     target_nodes = [visited_nodes[key] for key in target_keys]
