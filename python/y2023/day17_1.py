@@ -109,17 +109,17 @@ class Node:
         return self.x, self.y, self.came_from, self.came_from_num
 
 
-def build_nodes(width, height):
+def build_nodes(width, height, max_in_a_row):
     nodes = {}
     for y in range(height):
         for x in range(width):
             if x == 0 and y == 0:
                 nodes[(0, 0, "", 0)] = Node(x, y, "", 0, 0)
             else:
-                possible_ups = min(y, 3)
-                possible_downs = min(height - y - 1, 3)
-                possible_lefts = min(x, 3)
-                possible_rights = min(width - x - 1, 3)
+                possible_ups = min(y, max_in_a_row)
+                possible_downs = min(height - y - 1, max_in_a_row)
+                possible_lefts = min(x, max_in_a_row)
+                possible_rights = min(width - x - 1, max_in_a_row)
 
                 for i in range(1, possible_downs + 1):
                     node = Node(x, y, "D", i, math.inf)
@@ -200,12 +200,9 @@ def finished(unvisited_nodes, target_keys):
     return False
 
 
-def main(lines):
-    costs = []
-    for line in lines:
-        line_costs = [int(c) for c in line]
-        costs.append(line_costs)
-    unvisited_nodes = build_nodes(len(lines[0]), len(lines))
+def main(lines, neighbor_algorithm, max_in_a_row):
+    costs = build_costs(lines)
+    unvisited_nodes = build_nodes(len(lines[0]), len(lines), max_in_a_row)
     visited_nodes = {}
     current_node = unvisited_nodes[(0, 0, "", 0)]
     target_keys = {
@@ -213,7 +210,7 @@ def main(lines):
         for key in unvisited_nodes.keys()
         if key[0] == len(lines[0]) - 1 and key[1] == len(lines) - 1
     }
-    for neighbor in get_neighbors(current_node, unvisited_nodes):
+    for neighbor in neighbor_algorithm(current_node, unvisited_nodes):
         cost = costs[neighbor.y][neighbor.x]
         neighbor.distance = min(neighbor.distance, current_node.distance + cost)
     visited_nodes[current_node.key] = current_node
@@ -247,11 +244,20 @@ def main(lines):
     # return searcher.best_from[0, 0]
 
 
+def build_costs(lines):
+    costs = []
+    for line in lines:
+        line_costs = [int(c) for c in line]
+        costs.append(line_costs)
+    return costs
+
+
 if __name__ == "__main__":
-    # TODO: This is gonna take 8 hours
+    # TODO: This takes about an hour or two...
     # I assume I'm spending all my time in `get_neighbors`
     # and caching wouldn't help there
     # maybe pattern matching would be faster?
+    # And you might want to re-run to see if it still is correct after re-factoring
     with open("../../data/2023/input17.txt") as f:
         lines = [line.strip() for line in f.readlines()]
-    print(main(lines))
+    print(main(lines), get_neighbors, 3)

@@ -14,4 +14,4 @@ def test_part_1(test_input):
 
 
 def test_part_2(test_input):
-    assert main2(test_input) == 64
+    assert main2(test_input) == 952408144115
