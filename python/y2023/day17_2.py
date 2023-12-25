@@ -3,54 +3,64 @@ from y2023.day17_1 import main
 
 def get_neighbors_2(node, nodes):
     answer = []
-
-    # get right neighbor
-    if node.came_from == "R":
-        key = None
-    elif node.came_from == "L":
-        if node.came_from_num < 3:
-            key = (node.x + 1, node.y, "L", node.came_from_num + 1)
-        else:
-            key = None
-    else:
-        key = (node.x + 1, node.y, "L", 1)
-    answer.append(nodes.get(key))
-
-    # get down neighbor
-    if node.came_from == "D":
-        key = None
-    elif node.came_from == "U":
-        if node.came_from_num < 3:
+    if node.came_from_num < 4:
+        # it's just the one move _if it's there_
+        if node.came_from == "R":
+            key = (node.x + 1, node.y, "R", node.came_from_num + 1)
+        elif node.came_from == "L":
+            key = (node.x - 1, node.y, "L", node.came_from_num + 1)
+        elif node.came_from == "U":
             key = (node.x, node.y + 1, "U", node.came_from_num + 1)
-        else:
-            key = None
-    else:
-        key = (node.x, node.y + 1, "U", 1)
-    answer.append(nodes.get(key))
-
-    # get left neighbor
-    if node.came_from == "L":
-        key = None
-    elif node.came_from == "R":
-        if node.came_from_num < 3 and node.x > 0:
-            key = (node.x - 1, node.y, "R", node.came_from_num + 1)
-        else:
-            key = None
-    else:
-        key = (node.x - 1, node.y, "R", 1)
-    answer.append(nodes.get(key))
-
-    # get up neighbor
-    if node.came_from == "U":
-        key = None
-    elif node.came_from == "D":
-        if node.came_from_num < 3 and node.y > 0:
+        elif node.came_from == "D":
             key = (node.x, node.y - 1, "D", node.came_from_num + 1)
         else:
-            key = None
+            raise RuntimeError("Shouldn't be here either")
+        answer.append(nodes.get(key))
     else:
-        key = (node.x, node.y - 1, "D", 1)
-    answer.append(nodes.get(key))
+        keys = []
+        if node.came_from == "R":
+            # turn 90 degrees
+            keys.append((node.x, node.y - 1, "D", 1))
+            keys.append((node.x, node.y + 1, "U", 1))
+
+            # keep going left if possible
+            # (may not need to do this check if it's not in nodes...)
+            if node.came_from_num < 10:
+                keys.append((node.x - 1, node.y, "R", node.came_from_num + 1))
+
+        elif node.came_from == "L":
+            # turn 90 degrees
+            keys.append((node.x, node.y - 1, "D", 1))
+            keys.append((node.x, node.y + 1, "U", 1))
+
+            # keep going right if possible
+            # (may not need to do this check if it's not in nodes...)
+            if node.came_from_num < 10:
+                keys.append((node.x + 1, node.y, "L", node.came_from_num + 1))
+
+        elif node.came_from == "D":
+            # turn 90 degrees
+            keys.append((node.x - 1, node.y, "R", 1))
+            keys.append((node.x + 1, node.y, "L", 1))
+
+            # keep going up if possible
+            # (may not need to do this check if it's not in nodes...)
+            if node.came_from_num < 10:
+                keys.append((node.x, node.y - 1, "D", node.came_from_num + 1))
+
+        elif node.came_from == "U":
+            # turn 90 degrees
+            keys.append((node.x - 1, node.y, "R", 1))
+            keys.append((node.x + 1, node.y, "L", 1))
+
+            # keep going down if possible
+            # (may not need to do this check if it's not in nodes...)
+            if node.came_from_num < 10:
+                keys.append((node.x, node.y + 1, "U", node.came_from_num + 1))
+        else:
+            raise RuntimeError("Shouldn't be here")
+
+        answer = [nodes.get(key) for key in keys]
 
     return [a for a in answer if a]  # remove Nones
 
