@@ -11,7 +11,7 @@ def test_input():
 
 def test_part_1(test_input):
     assert main(["3"]) == 0
-    assert main(["35", "33"]) == 6  # NEXT: Why isn't this case working?
+    assert main(["35", "33"]) == 6
     assert main(["563", "735", "533"]) == 15
     assert main(["6453", "5563", "7735", "5533"]) == 23
     # assert main(["86887", "86453", "65563", "87735", "55533"]) == "??"  # currently getting 35, is that right?

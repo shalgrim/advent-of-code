@@ -10,9 +10,8 @@ def test_input():
 
 
 def test_part_1(test_input):
-    assert main(test_input) == 130
+    assert main(test_input, 7, 27) == 2
 
 
 def test_part_2(test_input):
-    assert main2(test_input) == 6
-    assert main2(test_input) == 50
+    assert main2(test_input) == 47

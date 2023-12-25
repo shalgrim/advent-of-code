@@ -140,7 +140,9 @@ def get_neighbors(node, nodes):
     answer = []
 
     # get right neighbor
-    if node.came_from == "L":
+    if node.came_from == "R":
+        key = None
+    elif node.came_from == "L":
         if node.came_from_num < 3:
             key = (node.x + 1, node.y, "L", node.came_from_num + 1)
         else:
@@ -150,7 +152,9 @@ def get_neighbors(node, nodes):
     answer.append(nodes.get(key))
 
     # get down neighbor
-    if node.came_from == "U":
+    if node.came_from == "D":
+        key = None
+    elif node.came_from == "U":
         if node.came_from_num < 3:
             key = (node.x, node.y + 1, "U", node.came_from_num + 1)
         else:
@@ -160,17 +164,21 @@ def get_neighbors(node, nodes):
     answer.append(nodes.get(key))
 
     # get left neighbor
-    if node.came_from == "R":
+    if node.came_from == "L":
+        key = None
+    elif node.came_from == "R":
         if node.came_from_num < 3 and node.x > 0:
             key = (node.x - 1, node.y, "R", node.came_from_num + 1)
         else:
             key = None
     else:
-        key = (node.x-1, node.y, "R", 1)
+        key = (node.x - 1, node.y, "R", 1)
     answer.append(nodes.get(key))
 
     # get up neighbor
-    if node.came_from == "D":
+    if node.came_from == "U":
+        key = None
+    elif node.came_from == "D":
         if node.came_from_num < 3 and node.y > 0:
             key = (node.x, node.y - 1, "D", node.came_from_num + 1)
         else:
@@ -211,14 +219,17 @@ def main(lines):
     visited_nodes[current_node.key] = current_node
     del unvisited_nodes[current_node.key]
 
+    print(f"{len(unvisited_nodes)=}")
     while not finished(unvisited_nodes, target_keys):
+        if len(visited_nodes) % 100 == 0:
+            print(f"{len(visited_nodes)=}")
         min_distance = min(node.distance for node in unvisited_nodes.values())
         possible_next_current = [
             node for node in unvisited_nodes.values() if node.distance == min_distance
         ]
         # TODO: check for an empty list, though that should be not possible if I do my termination correction
         current_node = possible_next_current[0]
-        print(current_node)
+        # print(current_node)
         for neighbor in get_neighbors(current_node, unvisited_nodes):
             cost = costs[neighbor.y][neighbor.x]
             neighbor.distance = min(neighbor.distance, current_node.distance + cost)
@@ -237,6 +248,10 @@ def main(lines):
 
 
 if __name__ == "__main__":
+    # TODO: This is gonna take 8 hours
+    # I assume I'm spending all my time in `get_neighbors`
+    # and caching wouldn't help there
+    # maybe pattern matching would be faster?
     with open("../../data/2023/input17.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))

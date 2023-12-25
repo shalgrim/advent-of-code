@@ -1,4 +1,4 @@
-BOOKMARK_FN = '../data/day24_bookmark.txt'
+BOOKMARK_FN = "../data/day24_bookmark.txt"
 
 
 def number_generator(start_from=0):
@@ -20,45 +20,45 @@ def update_bad_starts(bad_starts, number, input_index):
 
 def run_program(lines, number, bad_starts):
     input_index = 0
-    registers = {'w': 0, 'x': 0, 'y': 0, 'z': 0}
+    registers = {"w": 0, "x": 0, "y": 0, "z": 0}
 
     for line_num, line in enumerate(lines, 1):
         # assertions that my analysis to short-circuit things is correct
         if line_num == 19:
             assert (
-                int(str(number)[0]) + 3 == registers['z'] == registers['y']
+                int(str(number)[0]) + 3 == registers["z"] == registers["y"]
             ), f'these should all be equal: {int(str(number)[0]) + 3}, {registers["z"]}, {registers["y"]}'
 
         command = line.split()[0]
-        if command == 'inp':
+        if command == "inp":
             variable = line.split()[1]
             registers[variable] = int(str(number)[input_index])
             input_index += 1
-        elif command in ['add', 'mul', 'div', 'mod']:
+        elif command in ["add", "mul", "div", "mod"]:
             var1, var2 = line.split()[1:]
             val1 = registers[var1]
             val2 = registers[var2] if var2 in registers else int(var2)
 
-            if command == 'add':
+            if command == "add":
                 output = val1 + val2
-            elif command == 'mul':
+            elif command == "mul":
                 output = val1 * val2
-            elif command == 'div':
+            elif command == "div":
                 if val2 == 0:
                     update_bad_starts(bad_starts, number, input_index)
                     raise ZeroDivisionError
                 output = val1 // val2
-            elif command == 'mod':
+            elif command == "mod":
                 if val1 < 0 or val2 <= 0:
                     update_bad_starts(bad_starts, number, input_index)
-                    raise ZeroDivisionError('Invalid mod operation')
+                    raise ZeroDivisionError("Invalid mod operation")
                 output = val1 % val2
             else:
-                raise Exception(f'Unexpected {command=}')
+                raise Exception(f"Unexpected {command=}")
 
             registers[var1] = output
 
-    return registers['z']
+    return registers["z"]
 
 
 def has_bad_start(number, bad_starts):
@@ -78,23 +78,23 @@ def main(lines, start_from=0, known_bad_starts=None):
                 continue
             else:
                 if number % 9999 == 0:
-                    print(f'{number=}: {program_output=}')
+                    print(f"{number=}: {program_output=}")
                 if program_output == 0:
                     return number
     except KeyboardInterrupt:
-        print('keyboard interrupt')
-        outlines = [str(number) + '\n']
-        outlines += [f'{bs}\n' for bs in bad_starts]
-        print(f'{bad_starts=}')
-        with open(BOOKMARK_FN, 'w') as f:
+        print("keyboard interrupt")
+        outlines = [str(number) + "\n"]
+        outlines += [f"{bs}\n" for bs in bad_starts]
+        print(f"{bad_starts=}")
+        with open(BOOKMARK_FN, "w") as f:
             f.writelines(outlines)
-        print('re-raising')
+        print("re-raising")
         raise
     return -1
 
 
-if __name__ == '__main__':
-    with open('../data/input24.txt') as f:
+if __name__ == "__main__":
+    with open("../data/input24.txt.txt") as f:
         program_lines = [line.strip() for line in f.readlines()]
 
     stored_bad_starts = None
