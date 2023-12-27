@@ -18,8 +18,21 @@ def test_part_1(test_input):
 
 
 def test_part_1_full(test_input):
-    assert main(test_input) == 102
+    assert main(test_input, get_neighbors, 3) == 102
 
 
 def test_part_2(test_input):
-    assert main(test_input, get_neighbors_2, 10) == 71
+    assert main(test_input, get_neighbors_2, 10) == 94
+
+
+def test_part_2_example_2():
+    lines = [
+        "111111111111",
+        "999999999991",
+        "999999999991",
+        "999999999991",
+        "999999999991",
+    ]
+    # NEXT: getting 47...which I think is correct, I think AoC is wrong on this on
+    # A-ha, no, because it has to end on a length of at least 4, so it's really 71
+    assert main(lines, get_neighbors_2, 10) == 71

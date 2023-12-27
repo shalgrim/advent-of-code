@@ -227,13 +227,14 @@ def main(lines, neighbor_algorithm, max_in_a_row):
         # TODO: check for an empty list, though that should be not possible if I do my termination correction
         current_node = possible_next_current[0]
         # print(current_node)
-        for neighbor in get_neighbors(current_node, unvisited_nodes):
+        for neighbor in neighbor_algorithm(current_node, unvisited_nodes):
             cost = costs[neighbor.y][neighbor.x]
             neighbor.distance = min(neighbor.distance, current_node.distance + cost)
         visited_nodes[current_node.key] = current_node
         del unvisited_nodes[current_node.key]
 
-    target_nodes = [visited_nodes[key] for key in target_keys]
+    target_nodes = [visited_nodes.get(key) for key in target_keys]
+    target_nodes = [node for node in target_nodes if node]
     return min(node.distance for node in target_nodes)
 
     ## new djikstra stuff ^^
