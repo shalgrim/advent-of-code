@@ -5,7 +5,6 @@ def do_ranges_overlap(tup1, tup2):
     min1, max1 = sorted([tup1[0], tup1[1]])
     min2, max2 = sorted([tup2[0], tup2[1]])
 
-    # TODO: Grok this https://stackoverflow.com/questions/3269434/whats-the-most-efficient-way-to-test-if-two-ranges-overlap
     return min1 <= max2 and min2 <= max2
 
 
@@ -17,9 +16,8 @@ class Brick:
         self.x2 = x2
         self.y2 = y2
         self.z2 = z2
-        self.supporting_z = 0
+        self.overlapping_bricks = []
         self.supporting_bricks = []
-        self.bricks_i_support = []
 
     def key(self):
         return self.x1, self.y1, self.z1
@@ -27,9 +25,10 @@ class Brick:
     def __str__(self):
         return str(max(self.z1, self.z2))
 
-    def set_supporting_z(self, bricks_by_highest_z):
-        """TODO: This algorithm doesn't work because the blocks haven't fallen"""
-        z = 0
+    def set_supporting_bricks(self, bricks_by_highest_z):
+        # NEXT: Once everything has dropped can't I just find supporting bricks
+        # by looking one level lower? And I should assert that everything with z > 1
+        # has at least one blocking brick
         supporting_bricks = []
 
         for z in range(min(self.z1, self.z2) - 1, 0, -1):
@@ -39,7 +38,6 @@ class Brick:
             ]
             if supporting_bricks:
                 break
-        self.supporting_z = z
         self.supporting_bricks = supporting_bricks
 
     def has_overlap(self, other):
@@ -47,14 +45,12 @@ class Brick:
             (self.x1, self.x2), (other.x1, other.x2)
         ) and do_ranges_overlap((self.y1, self.y2), (other.y1, other.y2))
 
-    def all_xy_points(self):
-        answer = set()
-        assert self.y2 >= self.y1
-        assert self.x2 >= self.x1
-        for y in range(self.y1, self.y2 + 1):
-            for x in range(self.x1, self.x2 + 1):
-                answer.add((x, y))
-        return answer
+    def set_overlapping_bricks(self, all_bricks):
+        self.overlapping_bricks = [
+            brick
+            for brick in all_bricks
+            if self.has_overlap(brick) and self.key() != brick.key()
+        ]
 
 
 def build_brick(line):
@@ -62,16 +58,6 @@ def build_brick(line):
     p1 = tuple(int(d) for d in points[0].split(","))
     p2 = tuple(int(d) for d in points[1].split(","))
     return Brick(*p1, *p2)
-
-
-def build_supports(brick, bricks):
-    answer = set()
-    og_brick = brick.all_xy_points()
-    for i, brick2 in bricks.items():
-        if max(brick.z1, brick.z2) < min(brick2.z1, brick2.z2):
-            if brick2.all_xy_points().intersection(og_brick):
-                answer.add(i)
-    return answer
 
 
 def is_supported_by(
@@ -155,14 +141,50 @@ def build_directly_supports(directly_supported_by):
     return answer
 
 
+def drop_bricks(bricks_by_lowest_z):
+    did_drop = False
+    for z, bricks in sorted(bricks_by_lowest_z.items()):
+        for brick in bricks:
+            lo_z, hi_z = sorted([brick.z1, brick.z2])
+            would_block = [
+                b for b in brick.overlapping_bricks if max(b.z1, b.z2) < lo_z
+            ]
+            if would_block:
+                blocking_z = max([max(b.z1, b.z2) for b in would_block])
+                levels_to_drop = lo_z - blocking_z - 1
+            else:
+                levels_to_drop = lo_z - 1
+
+            brick.z1 -= levels_to_drop
+            brick.z2 -= levels_to_drop
+            if not did_drop and levels_to_drop > 0:
+                did_drop = True
+
+    return did_drop
+
+
+def get_bricks_by_z(bricks):
+    bricks_by_highest_z = defaultdict(list)
+    bricks_by_lowest_z = defaultdict(list)
+    for brick in bricks:
+        ordered_zs = sorted([brick.z1, brick.z2])
+        bricks_by_lowest_z[ordered_zs[0]].append(brick)
+        bricks_by_highest_z[ordered_zs[1]].append((brick))
+    return bricks_by_lowest_z, bricks_by_highest_z
+
+
 def main(lines):
     bricks = [build_brick(line) for line in lines]
-    # bricks_by_p1 = {(b.x1, b.y1, b.z1): b for b in bricks}
-    bricks_by_highest_z = defaultdict(list)
     for brick in bricks:
-        bricks_by_highest_z[max(brick.z1, brick.z2)].append(brick)
+        brick.set_overlapping_bricks(bricks)
+
+    bricks_by_lowest_z, bricks_by_highest_z = get_bricks_by_z(bricks)
+
+    while drop_bricks(bricks_by_lowest_z):
+        bricks_by_lowest_z, bricks_by_highest_z = get_bricks_by_z(bricks)
+
     for brick in bricks:
-        brick.set_supporting_z(bricks_by_highest_z)
+        brick.set_supporting_bricks(bricks_by_highest_z)
 
     undisintegratable_bricks = set()
     for brick in bricks:
@@ -172,7 +194,7 @@ def main(lines):
     return len(bricks) - len(undisintegratable_bricks)
 
 
-if __name__ == "__main__":  # 749 is too high
+if __name__ == "__main__":  # 749 is too high...and now I'm getting 909 sigh
     with open("../../data/2023/input22.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
