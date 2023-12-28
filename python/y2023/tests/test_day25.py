@@ -9,4 +9,4 @@ def test_input():
 
 
 def test_part_1(test_input):
-    assert main(test_input, 7, 27) == 2
+    assert main(test_input) == 54
