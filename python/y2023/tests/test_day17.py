@@ -33,6 +33,4 @@ def test_part_2_example_2():
         "999999999991",
         "999999999991",
     ]
-    # NEXT: getting 47...which I think is correct, I think AoC is wrong on this on
-    # A-ha, no, because it has to end on a length of at least 4, so it's really 71
     assert main(lines, get_neighbors_2, 10, 4) == 71
