@@ -66,7 +66,7 @@ def main(lines):
     for i, combo in enumerate(itertools.combinations(wires, 3)):
         if i % 1000 == 0:
             print(i)
-        # lol this is over 619 million
+        # lol this is over 337 million
         component_set = remove_wires(components, combo)
         reachable_sets = create_reachable_sets(component_set)
         if len(reachable_sets) == 2:
