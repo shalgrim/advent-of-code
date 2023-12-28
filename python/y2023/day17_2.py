@@ -76,8 +76,8 @@ def get_neighbors_2(node, nodes):
 # right and left nodes if I get to the bottom having only moved 1-3 times downward
 # But I very likely do need to make sure my target keys only contain distance_from >= 4
 # So those steps would be:
-#   1. Alter how target keys are calculated (will need another input argument)
-#   2. Verify the tests still work
+#   1. Alter how target keys are calculated (will need another input argument) DONE
+#   2. Verify the tests still work DONE
 #   3. Run part 2
 #   4. If that doesn't get me the right answer then ensure that those changes didn't break part 1
 # Alternately I could just at the end filter out target nodes with distance_from < 4
