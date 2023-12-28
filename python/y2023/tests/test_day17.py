@@ -22,7 +22,7 @@ def test_part_1_full(test_input):
 
 
 def test_part_2(test_input):
-    assert main(test_input, get_neighbors_2, 10) == 94
+    assert main(test_input, get_neighbors_2, 10, 4) == 94
 
 
 def test_part_2_example_2():
@@ -35,4 +35,4 @@ def test_part_2_example_2():
     ]
     # NEXT: getting 47...which I think is correct, I think AoC is wrong on this on
     # A-ha, no, because it has to end on a length of at least 4, so it's really 71
-    assert main(lines, get_neighbors_2, 10) == 71
+    assert main(lines, get_neighbors_2, 10, 4) == 71

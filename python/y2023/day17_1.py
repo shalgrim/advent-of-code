@@ -200,7 +200,7 @@ def finished(unvisited_nodes, target_keys):
     return False
 
 
-def main(lines, neighbor_algorithm, max_in_a_row):
+def main(lines, neighbor_algorithm, max_in_a_row, min_in_a_row=0):
     costs = build_costs(lines)
     unvisited_nodes = build_nodes(len(lines[0]), len(lines), max_in_a_row)
     visited_nodes = {}
@@ -210,6 +210,10 @@ def main(lines, neighbor_algorithm, max_in_a_row):
         for key in unvisited_nodes.keys()
         if key[0] == len(lines[0]) - 1 and key[1] == len(lines) - 1
     }
+
+    if min_in_a_row:
+        target_keys = {key for key in target_keys if key[3] >= min_in_a_row}
+
     for neighbor in neighbor_algorithm(current_node, unvisited_nodes):
         cost = costs[neighbor.y][neighbor.x]
         neighbor.distance = min(neighbor.distance, current_node.distance + cost)
