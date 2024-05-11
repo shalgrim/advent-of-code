@@ -56,6 +56,7 @@ class StateHistory:
 def generate_new_moves(
     state_history: StateHistory, t: int, valves: dict[str, Valve]
 ) -> list[State]:
+    # TODO: if all flow-rate-positive valves are open, just return a list with only the current state
     states = state_history.states
     most_recent_state = states[-1]
     current_valve_id = most_recent_state.current_valve_id
@@ -84,6 +85,7 @@ def main(lines):
     state_histories = [StateHistory([State("AA", {})])]
 
     for t in range(1, 31):
+        print(f"== Minute {t} ==")
         new_state_histories = []
         for history in state_histories:
             for new_state in generate_new_moves(history, t, valves):
@@ -99,6 +101,6 @@ def main(lines):
 
 
 if __name__ == "__main__":
-    with open("../../data/2022/test16.txt") as f:
+    with open("../../data/2022/input16.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
