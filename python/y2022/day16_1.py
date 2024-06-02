@@ -3,7 +3,7 @@ https://adventofcode.com/2022/day/16
 """
 from copy import copy
 from dataclasses import dataclass
-from itertools import permutations
+from typing import List, Set
 
 
 def build_valve_from_line(line):
@@ -47,31 +47,59 @@ class State:
     current_valve_id: str
     opened_valves: dict[str, int]  # valve_id: time_opened
 
+    def __hash__(self):
+        return hash((self.current_valve_id, tuple(self.opened_valves.items())))
+
 
 class StateHistory:
     def __init__(self, states: list[State]):
         self.states = states
 
 
+def all_flow_positive_valves_open(
+    most_recent_state: State, valves: dict[str, Valve]
+) -> bool:
+    positive_valve_ids = {k for k, v in valves.items() if v.flow_rate > 0}
+    opened_valve_ids = set(most_recent_state.opened_valves.keys())
+    return not positive_valve_ids.difference(opened_valve_ids)
+
+
+def does_not_contain(states: list[State], state: State) -> bool:
+    """Currently not used since I think my `not in` works"""
+    return not any(s == state for s in states)
+
+
 def generate_new_moves(
-    state_history: StateHistory, t: int, valves: dict[str, Valve]
+    state_history: StateHistory,
+    t: int,
+    valves: dict[str, Valve],
 ) -> list[State]:
-    # TODO: if all flow-rate-positive valves are open, just return a list with only the current state
     states = state_history.states
     most_recent_state = states[-1]
+
+    if all_flow_positive_valves_open(most_recent_state, valves):
+        return [
+            State(
+                most_recent_state.current_valve_id,
+                copy(most_recent_state.opened_valves),
+            )
+        ]
+
     current_valve_id = most_recent_state.current_valve_id
     current_valve = valves[current_valve_id]
     possible_next_moves = copy(current_valve.destinations)
     possible_next_states = []
+
     for move in possible_next_moves:
         new_state = State(move, copy(most_recent_state.opened_valves))
-
-        # TODO: Check that this `not in` works as I expect...make a test
         if new_state not in states:
             possible_next_states.append(new_state)
 
-    if current_valve_id not in states[-1].opened_valves and current_valve.flow_rate:
-        new_opened_valves = copy(states[-1].opened_valves)
+    if (
+        current_valve_id not in most_recent_state.opened_valves
+        and current_valve.flow_rate
+    ):
+        new_opened_valves = copy(most_recent_state.opened_valves)
         new_opened_valves[current_valve_id] = t
         new_state = State(current_valve_id, new_opened_valves)
         possible_next_states.append(new_state)
@@ -79,10 +107,31 @@ def generate_new_moves(
     return possible_next_states
 
 
+def uniquify(state_histories: List[StateHistory]) -> List[StateHistory]:
+    """From a list of StateHistories, returns only one of each final state"""
+    uniques = []
+
+    # TODO: Adding this sped things way up, but I may still need to track all seen states and just never revisit
+    # regardless of t. To do that I will need to create a set of seen states in `main` and pass it to
+    # `generate_new_moves` and `uniquify` and in doing so I think I can get rid of the concept of state histories
+    # altogether
+    finals = set()
+
+    for sh in state_histories:
+        if sh.states[-1] not in finals:
+            finals.add(sh.states[-1])
+            uniques.append(sh)
+
+    return uniques
+
+
 def main(lines):
     """BFS that checks all possibilities then finds max"""
     valves = build_valves(lines)
-    state_histories = [StateHistory([State("AA", {})])]
+    initial_state = State("AA", {})
+    # seen_states = set()
+    # seen_states.add(initial_state)
+    state_histories = [StateHistory(initial_state)]
 
     for t in range(1, 31):
         print(f"== Minute {t} ==")
@@ -92,7 +141,7 @@ def main(lines):
                 new_state_list = copy(history.states)
                 new_state_list.append(new_state)
                 new_state_histories.append(StateHistory(new_state_list))
-        state_histories = new_state_histories
+        state_histories = uniquify(new_state_histories)
 
     totals = [
         calc_total_pressure_release(history, valves) for history in state_histories
