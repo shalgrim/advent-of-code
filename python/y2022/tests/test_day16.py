@@ -29,7 +29,7 @@ def test_calc_total_pressure_release(tst_input):
 
 def test_main1(tst_input, puzzle_input):
     assert main1(tst_input) == 1651
-    # assert main1(puzzle_input) == 1234
+    assert main1(puzzle_input) == 1617
 
 
 # def test_main2(test_input, puzzle_input):
