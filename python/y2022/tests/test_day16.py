@@ -5,6 +5,9 @@ from y2022.day16_1 import (
     State,
     build_valves,
 )
+from y2022.day16_2 import main as main2
+from y2022.day16_2 import calc_total_pressure_release as calc_total_pressure_release2
+from y2022.day16_2 import State as State2
 
 
 @pytest.fixture
@@ -31,6 +34,13 @@ def test_main1(tst_input, puzzle_input):
     assert main1(puzzle_input) == 1617
 
 
-# def test_main2(test_input, puzzle_input):
-#     assert main1(test_input) == 1234
-#     assert main1(puzzle_input) == 1234
+def test_calc_total_pressure_release2(tst_input):
+    valves = build_valves(tst_input)
+    tracker = {"DD": 2, "JJ": 3, "BB": 7, "HH": 7, "CC": 9, "EE": 11}
+    state = State2(("CC", "EE"), tracker)
+    assert calc_total_pressure_release2(state, valves) == 1707
+
+
+def test_main2(tst_input, puzzle_input):
+    assert main2(tst_input) == 1707
+    # assert main2(puzzle_input) == 1234
