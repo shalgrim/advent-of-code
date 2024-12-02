@@ -12,8 +12,7 @@ def is_safe(report):
     if sorted(report, reverse=reversed) != report:
         return False
     diffs = [abs(report[i + 1] - report[i]) for i in range(len(report) - 1)]
-    answer = max(diffs) <= 3 and all(diffs)
-    return answer
+    return max(diffs) <= 3 and all(diffs)
 
 
 def main(lines):

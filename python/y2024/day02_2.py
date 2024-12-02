@@ -1,8 +1,8 @@
 from copy import copy
 
 from aoc.io import this_year_day
-from y2024.day02_1 import make_report
 from y2024.day02_1 import is_safe as is_safe_undamped
+from y2024.day02_1 import make_report
 
 
 def is_safe(report):
