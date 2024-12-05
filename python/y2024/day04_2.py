@@ -1,7 +1,5 @@
 from typing import List
 
-from isort.wrap_modes import backslash_grid
-
 from aoc.io import this_year_day
 
 
