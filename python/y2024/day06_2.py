@@ -6,6 +6,7 @@ def main(lines):
     loop_positions = []
     for x in range(len(lines[0])):
         for y in range(len(lines)):
+            print(f"{x=}, {y=}")
             map = Map(lines)
             if (x, y) in map.obstacles or (x, y) == map.guard_position:
                 continue
@@ -18,8 +19,8 @@ def main(lines):
 
 
 if __name__ == "__main__":
-    # testing = False
-    testing = True
+    testing = False
+    # testing = True
     filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
     with open(f"../../data/{year}/{filetype}{day}.txt") as f:
