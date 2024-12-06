@@ -1,4 +1,5 @@
 from copy import copy
+from typing import List
 
 from aoc.io import this_year_day
 from y2024.day05_1 import process_input, is_correct, get_middle_value
@@ -20,7 +21,7 @@ def reorder_update(update, rules):
     return final_ordering
 
 
-def main(lines):
+def main(lines: List[str]) -> int:
     rules, updates = process_input(lines)
     incorrect_updates = [update for update in updates if not is_correct(update, rules)]
     reordered_updates = [reorder_update(update, rules) for update in incorrect_updates]
@@ -29,8 +30,10 @@ def main(lines):
 
 
 if __name__ == "__main__":
+    testing = False
+    # testing = True
+    filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
-    with open(f"../../data/{year}/input{day}.txt") as f:
-        # with open(f"../../data/{year}/test{day}.txt") as f:
+    with open(f"../../data/{year}/{filetype}{day}.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
