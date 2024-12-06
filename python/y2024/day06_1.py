@@ -12,6 +12,7 @@ class Direction(Enum):
 
 class Map:
     def __init__(self, lines):
+        self.looped = False
         self.grid = {}
         self.obstacles = set()
         self.guard_position = None
@@ -19,6 +20,7 @@ class Map:
         self.height = len(lines)
         self.width = len(lines[0])
         self.visited = set()
+        self.visited_plus = set()
         for y, line in enumerate(lines):
             for x, char in enumerate(line):
                 self.grid[(x, y)] = char
@@ -50,11 +52,17 @@ class Map:
         self.guard_direction = Direction((self.guard_direction.value + 1) % 4)
 
     def move_guard(self):
+        if (self.guard_position, self.guard_direction) in self.visited_plus:
+            self.looped = True
         self.visited.add(self.guard_position)
+        self.visited_plus.add((self.guard_position, self.guard_direction))
         if self.next_coordinate in self.obstacles:
             self.turn()
         else:
             self.guard_position = self.next_coordinate
+
+    def add_obstacle(self, x, y):
+        self.obstacles.add((x, y))
 
 
 def main(lines):
