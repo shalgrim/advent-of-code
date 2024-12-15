@@ -8,8 +8,8 @@ class Machine:
         self.prize = prize
 
     def calc_cheapest(self):
-        max_a_presses = min(self.prize[0] // self.a[0], self.prize[1] // self.a[1])
-        max_b_presses = min(self.prize[0] // self.b[0], self.prize[1] // self.b[1])
+        # max_a_presses = min(self.prize[0] // self.a[0], self.prize[1] // self.a[1])
+        # max_b_presses = min(self.prize[0] // self.b[0], self.prize[1] // self.b[1])
         possibilities = []
 
         for a in range(1, 101):
@@ -22,6 +22,7 @@ class Machine:
 
         if not possibilities:
             return 0
+        # print(len(possibilities))
         return min(p[0] * 3 + p[1] for p in possibilities)
 
 
@@ -65,11 +66,10 @@ def main(lines):
 
 
 if __name__ == "__main__":
-    testing = False
-    # testing = True
+    # testing = False
+    testing = True
     filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
-    # 35271 is wrong
     with open(f"../../data/{year}/{filetype}{day}.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
