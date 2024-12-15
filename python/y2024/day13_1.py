@@ -1,3 +1,5 @@
+import math
+
 from aoc.io import this_year_day
 
 
@@ -8,8 +10,6 @@ class Machine:
         self.prize = prize
 
     def calc_cheapest(self):
-        # max_a_presses = min(self.prize[0] // self.a[0], self.prize[1] // self.a[1])
-        # max_b_presses = min(self.prize[0] // self.b[0], self.prize[1] // self.b[1])
         possibilities = []
 
         for a in range(1, 101):
@@ -22,8 +22,33 @@ class Machine:
 
         if not possibilities:
             return 0
-        # print(len(possibilities))
         return min(p[0] * 3 + p[1] for p in possibilities)
+
+    def calc_cheapest_alternate(self):
+        # system of equations with two unkowns
+        # self.a[0]a + self.b[0]b = self.prize[0]
+        # self.a[1]a + self.b[1]b = self.prize[1]
+        # where a and b are number of presses of each, respectively
+        alcm = math.lcm(self.a[0], self.a[1])
+        eq1_multiplier = alcm // self.a[0]
+        eq2_multiplier = alcm // self.a[1]
+
+        eq1a = self.a[0] * eq1_multiplier
+        eq1b = self.b[0] * eq1_multiplier
+        eq1prize = self.prize[0] * eq1_multiplier
+
+        eq2a = self.a[1] * eq2_multiplier
+        eq2b = self.b[1] * eq2_multiplier
+        eq2prize = self.prize[1] * eq2_multiplier
+
+        # now subtract the two equations
+        assert eq1a == eq2a
+        b_sub = eq1b - eq2b
+        prize_sub = eq1prize - eq2prize
+        if prize_sub % b_sub == 0 and (num_b_presses := prize_sub // b_sub) > 0:
+            num_a_presses = (self.prize[0] - self.b[0] * num_b_presses) // self.a[0]
+            return num_a_presses * 3 + num_b_presses
+        return 0
 
 
 def build_button(line, sep="+"):
@@ -66,8 +91,8 @@ def main(lines):
 
 
 if __name__ == "__main__":
-    # testing = False
-    testing = True
+    testing = False
+    # testing = True
     filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
     with open(f"../../data/{year}/{filetype}{day}.txt") as f:
