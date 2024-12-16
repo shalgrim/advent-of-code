@@ -1,5 +1,3 @@
-from doctest import UnexpectedException
-
 from aoc.io import this_year_day
 from y2024.day15_1 import Map
 
@@ -12,6 +10,7 @@ def process_input(lines):
         map.append(line)
 
     moves = "".join(lines[i + 1 :])
+    print(f"{len(moves)=}")
     return map, moves
 
 
@@ -196,7 +195,6 @@ def main(lines):
 
     for move in moves:
         map.move(move)
-        # print(map)
 
     print("Final Map")
     print(map)
@@ -204,6 +202,7 @@ def main(lines):
 
 
 if __name__ == "__main__":
+    # The only thing I can think to do is to start DRY'ing this and that might reveal some copypasta bug
     year, day = this_year_day(pad_day=True)
     with open(f"../../data/{year}/test15_part2.txt") as f:
         lines = [line.strip() for line in f.readlines()]
@@ -213,10 +212,7 @@ if __name__ == "__main__":
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
 
-    testing = False
-    # testing = True
-    filetype = "test" if testing else "input"
     # 1477669 is too low
-    with open(f"../../data/{year}/{filetype}{day}.txt") as f:
+    with open(f"../../data/{year}/input{day}.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
