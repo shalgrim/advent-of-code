@@ -1,7 +1,8 @@
 import math
-import sys
 
 from aoc.io import this_year_day
+
+weird_count = 0
 
 
 class Machine:
@@ -33,8 +34,21 @@ class Machine:
         assert eq1a == eq2a
         b_sub = eq1b - eq2b
         prize_sub = eq1prize - eq2prize
-        if prize_sub % b_sub == 0 and (num_b_presses := prize_sub // b_sub) > 0:
+        if prize_sub % b_sub == 0:
+            num_b_presses = prize_sub // b_sub
             num_a_presses = (self.prize[0] - self.b[0] * num_b_presses) // self.a[0]
+            assert num_a_presses > 0 and num_b_presses > 0
+            try:
+                assert (
+                    num_a_presses * self.a[0] + num_b_presses * self.b[0]
+                    == self.prize[0]
+                    and num_a_presses * self.a[1] + num_b_presses * self.b[1]
+                    == self.prize[1]
+                )
+            except AssertionError:
+                global weird_count
+                weird_count += 1
+                return 0  # for debugging
             return num_a_presses * 3 + num_b_presses
         return 0
 
@@ -79,13 +93,13 @@ def main(lines):
 
 
 # 81905908280345 is too high
+# 875318608908 is too low but it's the correct number for the test
 if __name__ == "__main__":
-    # sys.setrecursionlimit(100_000_000)
-    # print(sys.getrecursionlimit())
-    # testing = False
-    testing = True
+    # testing = True
+    testing = False
     filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
     with open(f"../../data/{year}/{filetype}{day}.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
+    print(weird_count)
