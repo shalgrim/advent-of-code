@@ -1,3 +1,6 @@
+from enum import StrEnum, auto
+from typing import Tuple
+
 from aoc.io import this_year_day
 from y2024.day15_1 import Map
 
@@ -14,39 +17,64 @@ def process_input(lines):
     return map, moves
 
 
+class Direction(StrEnum):
+    U = auto()
+    R = auto()
+    D = auto()
+    L = auto()
+
+
 class Box:
     def __init__(self, left, map):
         self.left = left
         self.right = left[0] + 1, left[1]
         self.map = map
 
-    def move_right(self) -> bool:
-        next_spot = self.right[0] + 1, self.right[1]
+    def _get_next_horizontal_spot(self, direction: Direction) -> Tuple[int, int]:
+        match direction:
+            case Direction.L:
+                return self.left[0] - 1, self.left[1]
+            case Direction.R:
+                return self.right[0] + 1, self.right[1]
+            case _:
+                raise ValueError(f"Unexpected direction: {direction}")
+
+    def _move_horizontal(self, dir: Direction) -> bool:
+        next_spot = self._get_next_horizontal_spot(dir)
         if next_spot in self.map.walls:
             return False
-        if not self.map.is_position_a_box(next_spot):
-            self.left = self.right
-            self.right = next_spot
+        if (box := self.map.get_box_at(next_spot)) is None:
+            match dir:
+                case Direction.L:
+                    self.right = self.left
+                    self.left = next_spot
+                case Direction.R:
+                    self.left = self.right
+                    self.right = next_spot
+                case _:
+                    raise ValueError(f"Unexpected direction: {dir}")
             return True
-        if self.map.get_box_at(next_spot).move_right():
-            self.left = self.right
-            self.right = next_spot
-            return True
-        return False
+        match dir:
+            case Direction.L:
+                if box.move_left():
+                    self.right = self.left
+                    self.left = next_spot
+                    return True
+                return False
+            case Direction.R:
+                if box.move_right():
+                    self.left = self.right
+                    self.right = next_spot
+                    return True
+                return False
+            case _:
+                raise ValueError(f"Unexpected direction: {dir}")
+
+    def move_right(self) -> bool:
+        return self._move_horizontal(Direction.R)
 
     def move_left(self) -> bool:
-        next_spot = self.left[0] - 1, self.left[1]
-        if next_spot in self.map.walls:
-            return False
-        if not self.map.is_position_a_box(next_spot):
-            self.right = self.left
-            self.left = next_spot
-            return True
-        if self.map.get_box_at(next_spot).move_left():
-            self.right = self.left
-            self.left = next_spot
-            return True
-        return False
+        return self._move_horizontal(Direction.L)
 
     def move_up(self) -> bool:
         next_left = self.left[0], self.left[1] - 1
