@@ -1,3 +1,4 @@
+from functools import cache
 from itertools import product
 
 from aoc.io import this_year_day
@@ -10,16 +11,44 @@ def process_input(lines):
 
 
 def is_possible(design, options):
-    for n in range(1, len(design) + 1):
-        for prod in product(options, repeat=n):
-            if "".join(prod) == design:
+    print(f"{design=}")
+    # two base cases
+    if design in options:
+        return True
+
+    for option in options:
+        if design.startswith(option):
+            if is_possible(design[len(option) :], options):
                 return True
+            else:
+                continue
     return False
+
+
+class PossibilityChecker:
+    def __init__(self, options):
+        self.options = options
+
+    @cache
+    def is_possible(self, design):
+        if design in self.options:
+            return True
+        for option in (o for o in self.options if design.startswith(o)):
+            if self.is_possible(design[len(option) :]):
+                return True
+        return False
 
 
 def main(lines):
     options, designs = process_input(lines)
-    return sum(is_possible(design, options) for design in designs)
+    answer = 0
+    pc = PossibilityChecker(options)
+    for i, design in enumerate(designs):
+        print(f"{i=}")
+        if pc.is_possible(design):
+            answer += 1
+    return answer
+    # return sum(is_possible(design, options) for design in designs)
 
 
 if __name__ == "__main__":

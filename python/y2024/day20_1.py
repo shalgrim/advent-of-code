@@ -93,9 +93,11 @@ def main(lines):
     for k, v in sorted_cheat_counter:
         print(k, v)
 
+    return sum(v for k, v in sorted_cheat_counter if k >= 100)
 
-if __name__ == "__main__":
-    testing = True
+
+if __name__ == "__main__":  # 1417 is the wrong answer tho it's right for somebody else
+    testing = False
     filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
     with open(f"../../data/{year}/{filetype}{day}.txt") as f:
