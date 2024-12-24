@@ -15,7 +15,6 @@ def make_connections(lines):
 
 def main(lines):
     connections = make_connections(lines)
-    computers = set(connections.keys())
 
     networks_of_three = set()
     for a, a_conns in connections.items():
