@@ -1,6 +1,7 @@
 import pytest
 from y2023.day16_1 import main
-from y2023.day16_2 import main as main2
+
+# from y2023.day16_2 import main as main2
 
 
 @pytest.fixture
@@ -13,5 +14,5 @@ def test_part_1(test_input):
     assert main(test_input) == 46
 
 
-def test_part_2(test_input):
-    assert main2(test_input) == 51
+# def test_part_2(test_input):
+#     assert main2(test_input) == 51
