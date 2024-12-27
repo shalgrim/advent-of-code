@@ -16,10 +16,9 @@ class Node:
         self.y = y
         self.facing = facing
         self.distance = math.inf
-        self.visited = False
 
-    def __str__(self):
-        return f"{self.x},{self.y},{self.facing.name}"
+    def __repr__(self):
+        return f"Node: {self.x},{self.y},{self.facing.name}"
 
 
 def create_nodes(lines):
@@ -46,15 +45,13 @@ def create_nodes(lines):
     return nodes, target_coords
 
 
-def main(lines):
-    all_nodes, target_coords = create_nodes(lines)
+def visit_nodes(all_nodes, target_coords):
     target_keys = {(target_coords[0], target_coords[1], Direction(i)) for i in range(4)}
     unvisited_nodes = {(node.x, node.y, node.facing): node for node in all_nodes}
     min_distance = min(node.distance for node in unvisited_nodes.values())
     current_node = [
         node for node in unvisited_nodes.values() if node.distance == min_distance
     ][0]
-
     # This is probably going to run too long tho...
     while target_keys.intersection(set(unvisited_nodes.keys())):
         if len(unvisited_nodes) % 1000 == 0:
@@ -102,12 +99,15 @@ def main(lines):
             node for node in unvisited_nodes.values() if node.distance == min_distance
         ][0]
 
+
+def main(lines):
+    all_nodes, target_coords = create_nodes(lines)
+    visit_nodes(all_nodes, target_coords)
     target_nodes = [node for node in all_nodes if (node.x, node.y) == target_coords]
     return min(node.distance for node in target_nodes)
 
 
 if __name__ == "__main__":
-    # TODO: Do Djikstra's (alternately add more logging around highest_n and rightest_n)
     with open(f"../../data/2024/test16_1.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
