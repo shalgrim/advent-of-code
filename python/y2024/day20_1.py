@@ -2,7 +2,10 @@ import itertools
 from collections import Counter
 
 from aoc.io import this_year_day
-from y2024.day16_1 import manhattan_distance
+
+
+def manhattan_distance(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 
 class Map:
@@ -74,13 +77,40 @@ class Map:
                     cheats[position] = combo[1][0] - combo[0][0] - 2
         return cheats
 
+    def find_longer_cheats(self, amount_to_save):
+        # Oh, look at the example, it doesn't have to be wall-only, just consecutive
+        # Ok...I think I know a decent-enough algorithm
+        # Start from starting point in route
+        # For every spot in route that's amount_to_save spots ahead of you (beware off by one)
+        # Check if manhattan distance is <= 20 (beware off by one)
+        # If so then time saved is like route distance - manhattan distance of something like that
+        # And store that in cheats with the start and end positions and the amount saved
+
+        cheats = {}
+        route_with_indexes = list(enumerate(self.route))
+        # So now to find cheats you can...
+        # Search Space: All coords on route that are manhattan distance between 2 and 20 apart
+        # Could also restrict to just those that are 100 or farther apart in the route
+
+        for combo in itertools.combinations(route_with_indexes, 2):
+            # Couldn't save enough, don't bother checking
+            route_distance = combo[1][0] - combo[0][0]
+            if route_distance < amount_to_save:
+                continue
+
+            # Don't bother checking if they're farther than 20 apart geographically
+            md = manhattan_distance(combo[0][1], combo[1][1])
+            if md > 20:
+                continue
+
+            cheats[(combo[0][1], combo[1][1])] = route_distance - md
+
+        return cheats
+
 
 def main(lines):
     map = Map(lines)
     map.establish_route()
-    # Idea: For each combination of points that are a manhattan distance of two apart but are
-    # further apart than that in the route, verify there's a wall in between, then remove it,
-    # and calculate how long the path would be if you remove the spots between those
     cheats = map.find_cheats()
     for k, v in cheats.items():
         print(k, v)
@@ -96,7 +126,7 @@ def main(lines):
     return sum(v for k, v in sorted_cheat_counter if k >= 100)
 
 
-if __name__ == "__main__":  # 1417 is the wrong answer tho it's right for somebody else
+if __name__ == "__main__":
     testing = False
     filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
