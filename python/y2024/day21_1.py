@@ -1,7 +1,8 @@
+import itertools
 import math
 from copy import copy
 from dataclasses import dataclass
-from typing import List, Set
+from typing import Set
 
 NUMERIC_PAD = {
     (0, 0): "7",
@@ -53,6 +54,20 @@ def directional_character(frum, to):
         elif fx - 1 == tx:
             return "<"
     raise ValueError("Should not be here")
+
+
+def find_all_shortest_paths_for_code(code):
+    paths = find_all_shortest_paths_numeric_pad_plus_press("A", code[0])
+
+    for i in range(len(code) - 1):
+        new_paths = find_all_shortest_paths_numeric_pad_plus_press(code[i], code[i + 1])
+        paths = {"".join(t) for t in itertools.product(paths, new_paths)}
+
+    return paths
+
+
+def find_all_shortest_paths_numeric_pad_plus_press(frum, to):
+    return {f"{path}A" for path in find_all_shortest_paths_numeric_pad(frum, to)}
 
 
 def find_all_shortest_paths_numeric_pad(frum, to):
