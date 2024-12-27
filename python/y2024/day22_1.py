@@ -1,6 +1,9 @@
+from functools import cache
+
 from aoc.io import this_year_day
 
 
+@cache
 def secret_number(number, times=1):
     answer = number
     for _ in range(times):
