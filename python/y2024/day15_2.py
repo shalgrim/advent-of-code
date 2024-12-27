@@ -76,7 +76,7 @@ class Box:
     def move_left(self) -> bool:
         return self._move_horizontal(Direction.L)
 
-    def move_up(self) -> bool:
+    def can_move_up(self) -> bool:
         next_left = self.left[0], self.left[1] - 1
         next_right = self.right[0], self.right[1] - 1
         if next_left in self.map.walls or next_right in self.map.walls:
@@ -84,30 +84,51 @@ class Box:
         if not self.map.is_position_a_box(next_left) and not self.map.is_position_a_box(
             next_right
         ):
-            self.left = next_left
-            self.right = next_right
+            # self.left = next_left
+            # self.right = next_right
             return True
         left_box = self.map.get_box_at(next_left)
         right_box = self.map.get_box_at(next_right)
         if left_box is right_box or right_box is None:
-            if left_box.move_up():
-                self.left = next_left
-                self.right = next_right
+            if left_box.can_move_up():
+                # self.left = next_left
+                # self.right = next_right
                 return True
             return False
         if left_box is None:
-            if right_box.move_up():
-                self.left = next_left
-                self.right = next_right
+            if right_box.can_move_up():
+                # self.left = next_left
+                # self.right = next_right
                 return True
             return False
-        if left_box.move_up() and right_box.move_up():
-            self.left = next_left
-            self.right = next_right
+        if left_box.can_move_up() and right_box.can_move_up():
+            # self.left = next_left
+            # self.right = next_right
             return True
         return False
 
-    def move_down(self) -> bool:
+    def _move_up(self):
+        """Assume you're calling this iff can_move_up returned True already"""
+        next_left = self.left[0], self.left[1] - 1
+        next_right = self.right[0], self.right[1] - 1
+        left_box = self.map.get_box_at(next_left)
+        right_box = self.map.get_box_at(next_right)
+
+        if not self.map.is_position_a_box(next_left) and not self.map.is_position_a_box(
+            next_right
+        ):
+            pass
+        elif left_box is right_box or right_box is None:
+            left_box._move_up()
+        elif left_box is None:
+            right_box._move_up()
+        else:
+            left_box._move_up()
+            right_box._move_up()
+        self.left = next_left
+        self.right = next_right
+
+    def can_move_down(self) -> bool:
         next_left = self.left[0], self.left[1] + 1
         next_right = self.right[0], self.right[1] + 1
         if next_left in self.map.walls or next_right in self.map.walls:
@@ -115,28 +136,49 @@ class Box:
         if not self.map.is_position_a_box(next_left) and not self.map.is_position_a_box(
             next_right
         ):
-            self.left = next_left
-            self.right = next_right
+            # self.left = next_left
+            # self.right = next_right
             return True
         left_box = self.map.get_box_at(next_left)
         right_box = self.map.get_box_at(next_right)
         if left_box is right_box or right_box is None:
-            if left_box.move_down():
-                self.left = next_left
-                self.right = next_right
+            if left_box.can_move_down():
+                # self.left = next_left
+                # self.right = next_right
                 return True
             return False
         if left_box is None:
-            if right_box.move_down():
-                self.left = next_left
-                self.right = next_right
+            if right_box.can_move_down():
+                # self.left = next_left
+                # self.right = next_right
                 return True
             return False
-        elif left_box.move_down() and right_box.move_down():
-            self.left = next_left
-            self.right = next_right
+        elif left_box.can_move_down() and right_box.can_move_down():
+            # self.left = next_left
+            # self.right = next_right
             return True
         return False
+
+    def _move_down(self):
+        """Assume you're calling this iff can_move_down returned True already"""
+        next_left = self.left[0], self.left[1] + 1
+        next_right = self.right[0], self.right[1] + 1
+        left_box = self.map.get_box_at(next_left)
+        right_box = self.map.get_box_at(next_right)
+
+        if not self.map.is_position_a_box(next_left) and not self.map.is_position_a_box(
+            next_right
+        ):
+            pass
+        elif left_box is right_box or right_box is None:
+            left_box._move_down()
+        elif left_box is None:
+            right_box._move_down()
+        else:
+            left_box._move_down()
+            right_box._move_down()
+        self.left = next_left
+        self.right = next_right
 
 
 class Map2(Map):
@@ -171,13 +213,15 @@ class Map2(Map):
     def move_boxes_down(self):
         next_move = self.robot[0], self.robot[1] + 1
         box = self.get_box_at(next_move)
-        if box.move_down():
+        if box.can_move_down():
+            box._move_down()
             self.robot = next_move
 
     def move_boxes_up(self):
         next_move = self.robot[0], self.robot[1] - 1
         box = self.get_box_at(next_move)
-        if box.move_up():
+        if box.can_move_up():
+            box._move_up()
             self.robot = next_move
 
     def move_boxes_left(self):
@@ -221,7 +265,10 @@ def main(lines):
     print("Initial Map")
     print(map)
 
-    for move in moves:
+    for i, move in enumerate(moves):
+        # print(map)
+        # print(f"Next Move: {move}, {i=}")
+        # input()
         map.move(move)
 
     print("Final Map")
