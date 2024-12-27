@@ -20,6 +20,10 @@ class Node:
     def __repr__(self):
         return f"Node: {self.x},{self.y},{self.facing.name}"
 
+    @property
+    def location(self):
+        return self.x, self.y
+
 
 def create_nodes(lines):
     nodes = []
