@@ -155,7 +155,7 @@ def main(lines, x1=0, y1=0, d1=Direction.RIGHT):
     return len(map.energized_cells)
 
 
-if __name__ == "__main__":  # 7789 is too high
+if __name__ == "__main__":  # 7788 is too high
     with open("../../data/2023/input16.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
