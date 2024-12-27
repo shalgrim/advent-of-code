@@ -32,7 +32,7 @@ def process_input_day2(lines):
     return grid
 
 
-def get_neighbors(position, grid):
+def get_neighbors(position: object, grid: object) -> object:
     y, x = position
     neighbors = []
     if y < len(grid) - 1:
@@ -84,7 +84,7 @@ def method3(grid):
 
     while destination not in visited:
         if len(unvisited) % 1000 == 0:
-            print(f'{datetime.utcnow()} {len(unvisited)=}')
+            print(f"{datetime.utcnow()} {len(unvisited)=}")
         current_distance = unvisited[current]
         neighbors = [n for n in get_neighbors(current, grid) if n not in visited]
         for neighbor in neighbors:
@@ -111,8 +111,8 @@ def main(lines):
     # return method2(grid)
 
 
-if __name__ == '__main__':  # 3068 is too high
-    with open('../data/input15.txt') as f:
+if __name__ == "__main__":  # 3068 is too high
+    with open("../data/input15.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
     grid = process_input_day2(lines)
