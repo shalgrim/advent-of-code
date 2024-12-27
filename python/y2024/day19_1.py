@@ -1,5 +1,4 @@
 from functools import cache
-from itertools import product
 
 from aoc.io import this_year_day
 
@@ -8,21 +7,6 @@ def process_input(lines):
     options = [option.strip() for option in lines[0].split(",")]
     designs = lines[2:]
     return options, designs
-
-
-def is_possible(design, options):
-    print(f"{design=}")
-    # two base cases
-    if design in options:
-        return True
-
-    for option in options:
-        if design.startswith(option):
-            if is_possible(design[len(option) :], options):
-                return True
-            else:
-                continue
-    return False
 
 
 class PossibilityChecker:
@@ -38,6 +22,15 @@ class PossibilityChecker:
                 return True
         return False
 
+    @cache
+    def possible_count(self, design):
+        if not design:
+            return 1
+        answer = 0
+        for option in (o for o in self.options if design.startswith(o)):
+            answer += self.possible_count(design[len(option) :])
+        return answer
+
 
 def main(lines):
     options, designs = process_input(lines)
@@ -46,12 +39,12 @@ def main(lines):
     for i, design in enumerate(designs):
         print(f"{i=}")
         if pc.is_possible(design):
-            answer += 1
+            answer += pc.possible_count(design)
     return answer
-    # return sum(is_possible(design, options) for design in designs)
 
 
 if __name__ == "__main__":
+    # testing = True
     testing = False
     filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
