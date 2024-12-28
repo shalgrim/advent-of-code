@@ -209,7 +209,10 @@ def find_all_shortest_paths_for_second_robot(code, num_iterations=1):
         answer = set()
         for path in these_are_the_codes_to_iterate_on:
             answer.update(find_all_shortest_paths_for_directional_code(path))
-        these_are_the_codes_to_iterate_on = answer
+        shortest_answer = min(len(a) for a in answer)
+        these_are_the_codes_to_iterate_on = {
+            a for a in answer if len(a) == shortest_answer
+        }
 
     shortest_distance = min(len(a) for a in answer)
     answer = {s for s in answer if len(s) == shortest_distance}
