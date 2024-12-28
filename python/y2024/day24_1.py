@@ -5,6 +5,10 @@ class Gate:
         isplit = inputt.split()
         self.inwires = [isplit[0], isplit[2]]
         self.tipe = isplit[1]
+        self.line = line
+
+    def __repr__(self):
+        return self.line
 
     def state(self, wires):
         if self.outwire in wires:
@@ -48,16 +52,18 @@ def compute_answer(wires):
     return answer
 
 
-def main(lines):
-    wires, gates = process_input(lines)
+def run_machine_on_input(gates, wires):
     none_gates = [1 for gate in gates if gate.state(wires) is None]
-
     # 🤔Checking their states should be enough to turn everything on?
     while none_gates:
         none_gates = [1 for gate in gates if gate.state(wires) is None]
-
     answer = compute_answer(wires)
     return answer
+
+
+def main(lines):
+    wires, gates = process_input(lines)
+    return run_machine_on_input(gates, wires)
 
 
 if __name__ == "__main__":
