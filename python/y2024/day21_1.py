@@ -3,6 +3,7 @@ import math
 import re
 from copy import copy
 from dataclasses import dataclass
+from datetime import datetime
 from functools import cache
 from typing import Set
 
@@ -203,7 +204,8 @@ def find_all_shortest_paths_for_second_robot(code, num_iterations=1):
     first_robot_sez = find_all_shortest_paths_for_code(code)
     these_are_the_codes_to_iterate_on = first_robot_sez
 
-    for _ in range(num_iterations):
+    for i in range(num_iterations):
+        print(f"{i=}", datetime.now())
         answer = set()
         for path in these_are_the_codes_to_iterate_on:
             answer.update(find_all_shortest_paths_for_directional_code(path))
