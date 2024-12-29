@@ -78,10 +78,25 @@ def find_all_shortest_paths_for_directional_code(code):
     paths = find_all_shortest_paths_directional_pad_plus_press("A", code[0])
 
     for i in range(len(code) - 1):
+        print(f"{i=}, {len(paths)=}")
         new_paths = find_all_shortest_paths_directional_pad_plus_press(
             code[i], code[i + 1]
         )
+        # Okay this cartesian product thing is where I'm really slowing down once
+        # the lengths of the codes get up over 50
+        # So...how can I fix it?
+        # Are there other smart things I can do to reduce?
+        # And what about figuring out what shortest paths are for various things we see "between the A's"
+        # and then just taking them together again and again?
+        # Wow, and that's with the find_all_shortest... call above being cached, so it's just keeping
+        # track of all the possibilities
+        # Yeah we're in the dozens of millions of paths
+        # so let's try reducing?
         paths = {"".join(t) for t in itertools.product(paths, new_paths)}
+        shortest_paths = min(len(path) for path in paths)
+        paths = {p for p in paths if len(p) == shortest_paths}
+        fewest_switches = min(count_switches(p) for p in paths)
+        paths = {p for p in paths if count_switches(p) == fewest_switches}
 
     return paths
 
@@ -200,19 +215,30 @@ def find_shortest_numeric_pad(frum, to):
     return all_nodes[REVERSE_NUMERIC_PAD[to]].distance
 
 
+def count_switches(a):
+    return sum(1 for i in range(len(a) - 1) if a[i] != a[i + 1])
+
+
 def find_all_shortest_paths_for_second_robot(code, num_iterations=1):
     first_robot_sez = find_all_shortest_paths_for_code(code)
     these_are_the_codes_to_iterate_on = first_robot_sez
 
     for i in range(num_iterations):
-        print(f"{i=}", datetime.now())
+        print(f"{i=} {len(these_are_the_codes_to_iterate_on)=}", datetime.now())
         answer = set()
-        for path in these_are_the_codes_to_iterate_on:
+        for j, path in enumerate(these_are_the_codes_to_iterate_on):
+            print(f"{j=} {len(path)=}")
             answer.update(find_all_shortest_paths_for_directional_code(path))
         shortest_answer = min(len(a) for a in answer)
+        answer = {a for a in answer if len(a) == shortest_answer}
+        fewest_switches = min(count_switches(a) for a in answer)
         these_are_the_codes_to_iterate_on = {
-            a for a in answer if len(a) == shortest_answer
+            a for a in answer if count_switches(a) == fewest_switches
         }
+
+        # # try just picking one...update: do not do this this breaks it...but understanding why
+        # could help pick better ones...
+        # these_are_the_codes_to_iterate_on = [list(these_are_the_codes_to_iterate_on)[0]]
 
     shortest_distance = min(len(a) for a in answer)
     answer = {s for s in answer if len(s) == shortest_distance}
@@ -240,8 +266,8 @@ def main(lines):
 
 
 if __name__ == "__main__":
-    # testing = True
-    testing = False
+    testing = True
+    # testing = False
     filetype = "test" if testing else "input"
     year, day = this_year_day(pad_day=True)
     with open(f"../../data/{year}/{filetype}{day}.txt") as f:
