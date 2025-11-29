@@ -1,0 +1,2 @@
+-r requirements-dev.in
+-e ../../coding-puzzle-tools
