@@ -1,11 +1,11 @@
-from collections import defaultdict, Counter
+from collections import Counter
 
 
-class Line():
+class Line:
     def __init__(self, inline):
-        origin, destination = inline.split(' -> ')
-        x1, y1 = origin.split(',')
-        x2, y2 = destination.split(',')
+        origin, destination = inline.split(" -> ")
+        x1, y1 = origin.split(",")
+        x2, y2 = destination.split(",")
         self.x1 = int(x1)
         self.x2 = int(x2)
         self.y1 = int(y1)
@@ -30,19 +30,19 @@ def main(inlines):
         if line.x1 == line.x2:
             lower = min(line.y1, line.y2)
             upper = max(line.y1, line.y2)
-            points_covered += [(line.x1, y) for y in range(lower, upper+1)]
+            points_covered += [(line.x1, y) for y in range(lower, upper + 1)]
         elif line.y1 == line.y2:
             lower = min(line.x1, line.x2)
             upper = max(line.x1, line.x2)
-            points_covered += [(x, line.y1) for x in range(lower, upper+1)]
+            points_covered += [(x, line.y1) for x in range(lower, upper + 1)]
 
     counter = Counter(points_covered)
     num_crosses = len([1 for v in counter.values() if v > 1])
     return num_crosses
 
 
-if __name__ == '__main__':
-    with open('../data/input05.txt') as f:
+if __name__ == "__main__":
+    with open("../data/input05.txt") as f:
         inlines = [line.strip() for line in f.readlines()]
 
     print(main(inlines))

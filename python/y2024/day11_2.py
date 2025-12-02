@@ -1,6 +1,4 @@
-from datetime import datetime
 import time
-from functools import lru_cache, cache
 
 from y2024.day11_1 import process_stones
 
@@ -61,7 +59,7 @@ def main(text, total_iterations):
 
 
 if __name__ == "__main__":
-    with open(f"../../data//2024/input11.txt") as f:
+    with open("../../data//2024/input11.txt") as f:
         # with open(f"../../data/2024/{filetype}11.txt") as f:
         text = f.read().strip()
 

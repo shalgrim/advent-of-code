@@ -1,4 +1,5 @@
 from collections import defaultdict
+
 from y2023.day15_1 import hash
 
 
@@ -23,7 +24,7 @@ def print_boxes(boxes):
         box_contents = boxes[i]
         if box_contents:
             outline = f"Box {i}: "
-            outline += ' '.join([f"[{k} {v}]" for k, v in box_contents.items()])
+            outline += " ".join([f"[{k} {v}]" for k, v in box_contents.items()])
             print(outline)
 
 

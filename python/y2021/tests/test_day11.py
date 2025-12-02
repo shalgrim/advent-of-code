@@ -1,11 +1,10 @@
 import pytest
 from day11_1 import main as main1
-from day11_2 import main as main2
 
 
 @pytest.fixture
 def test_input():
-    with open('../../data/test11.txt') as f:
+    with open("../../data/test11.txt") as f:
         return [line.strip() for line in f.readlines()]
 
 

@@ -1,5 +1,4 @@
 import pytest
-
 from y2023.day02_1 import main
 from y2023.day02_2 import main as main2
 

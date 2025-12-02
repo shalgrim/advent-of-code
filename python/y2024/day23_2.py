@@ -1,5 +1,4 @@
 import itertools
-from copy import copy
 
 from aoc.io import this_year_day
 from y2024.day23_1 import make_connections

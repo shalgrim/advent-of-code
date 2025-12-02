@@ -1,13 +1,15 @@
 import pytest
 from y2022.day16_1 import (
-    main as main1,
-    calc_total_pressure_release,
     State,
     build_valves,
+    calc_total_pressure_release,
 )
-from y2022.day16_2 import main as main2
-from y2022.day16_2 import calc_total_pressure_release as calc_total_pressure_release2
+from y2022.day16_1 import (
+    main as main1,
+)
 from y2022.day16_2 import State as State2
+from y2022.day16_2 import calc_total_pressure_release as calc_total_pressure_release2
+from y2022.day16_2 import main as main2
 
 
 @pytest.fixture

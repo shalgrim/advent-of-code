@@ -1,4 +1,5 @@
 from copy import deepcopy
+
 from y2023.day16_1 import Direction
 
 

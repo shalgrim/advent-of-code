@@ -1,6 +1,6 @@
 # from y2023.day16_1 import Direction, Beam
 # from y2023.day16_1 import main as main1
-from day16_1 import Direction, Beam
+from day16_1 import Beam, Direction
 from day16_1 import main as main1
 
 

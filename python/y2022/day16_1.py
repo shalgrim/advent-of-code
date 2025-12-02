@@ -1,9 +1,9 @@
 """
 https://adventofcode.com/2022/day/16
 """
+
 from copy import copy
 from dataclasses import dataclass
-from typing import List, Set
 
 
 def build_valve_from_line(line):

@@ -1,5 +1,6 @@
-from day19_1 import create_and_position_all_scanners
 from itertools import combinations
+
+from day19_1 import create_and_position_all_scanners
 
 
 def manhattan_distance(p1, p2):
@@ -15,8 +16,8 @@ def main(lines):
     return max(distances)
 
 
-if __name__ == '__main__':
-    with open('../data/input19.txt') as f:
+if __name__ == "__main__":
+    with open("../data/input19.txt") as f:
         lines = [line.strip() for line in f.readlines()]
 
     print(main(lines))

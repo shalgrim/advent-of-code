@@ -1,5 +1,6 @@
 from coding_puzzle_tools import read_input
 
+
 def main(lines):
     pointer = 50
     answer = 0
@@ -24,5 +25,6 @@ def main(lines):
 
     return answer
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print(main(read_input()))

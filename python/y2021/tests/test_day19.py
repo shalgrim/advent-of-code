@@ -1,9 +1,8 @@
 from collections import defaultdict
 
 import pytest
-from day19_1 import get_overlaps, Rotation
+from day19_1 import Rotation, get_overlaps, process_input
 from day19_1 import main as main1
-from day19_1 import process_input
 
 OVERLAPS = defaultdict(dict)
 OVERLAPS[0][1] = {  # as seen by scanner 0
@@ -54,7 +53,7 @@ ABSOLUTE_OVERLAPS_14 = {
 
 @pytest.fixture
 def test_input():
-    with open('../../data/test19.txt') as f:
+    with open("../../data/test19.txt") as f:
         return [line.strip() for line in f.readlines()]
 
 

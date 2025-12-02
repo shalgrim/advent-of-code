@@ -1,4 +1,5 @@
 import time
+
 from aoc.io import this_year_day
 
 

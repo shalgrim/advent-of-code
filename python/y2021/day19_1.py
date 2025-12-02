@@ -1,7 +1,5 @@
-from collections import defaultdict
 from copy import copy
 from enum import IntEnum
-from itertools import combinations
 
 
 class Rotation(IntEnum):
@@ -34,7 +32,7 @@ class Rotation(IntEnum):
         elif beacon_rotation == Rotation.ZYX:
             return [beacon[2], beacon[1], beacon[0]]
         else:
-            raise Exception(f'Invalid Rotation={beacon_rotation}')
+            raise Exception(f"Invalid Rotation={beacon_rotation}")
 
 
 def rotate(beacon, target_rotation):
@@ -106,11 +104,11 @@ def process_input(lines):
     for line in lines:
         if not line:
             continue
-        if line.startswith('---'):
+        if line.startswith("---"):
             scanner_id = int(line.split()[2])
             scanners[scanner_id] = Scanner(scanner_id)
         else:
-            coords = line.split(',')
+            coords = line.split(",")
             coords = [int(c) for c in coords]
             scanners[scanner_id].add_beacon(coords)
 
@@ -208,9 +206,9 @@ class Scanner:
             source_beacons.append(self.beacons[source_beacon_id])
             other_beacons.append(other.beacons[other_beacon_id])
 
-        assert (
-            self.rotation is not None
-        ), "How did I get here with rotation not being assigned"
+        assert self.rotation is not None, (
+            "How did I get here with rotation not being assigned"
+        )
 
         unrotated_source_beacons = [
             unrotate_and_polarize_beacon(beacon, self.rotation, (1, 1, 1))
@@ -318,7 +316,6 @@ def absolutify(
     reference_rotation,
     reference_polarity,
 ):
-
     # this loop got me four out of five in the test
     # out_position = []
     # for rel_pos, ref_pos, ref_pol in zip(relative_position, reference_position, reference_polarity):
@@ -383,7 +380,7 @@ def main(lines):
 def create_and_position_all_scanners(lines):
     scanners = process_input(lines)
     overlaps = get_overlaps(scanners)
-    print(f'{overlaps=}')
+    print(f"{overlaps=}")
     scanners[0].position = (0, 0, 0)
     scanners[0].rotation = Rotation.XYZ
     scanners[0].polarity = (1, 1, 1)
@@ -393,18 +390,18 @@ def create_and_position_all_scanners(lines):
             s2 = scanners[overlap[1]]
 
             if s1.position and not s2.position:
-                print(f'orienting {s2.sid} based on {s1.sid}')
+                print(f"orienting {s2.sid} based on {s1.sid}")
                 s2.orient(s1)
-                print(f'{s2.position} {s2.rotation} {s2.polarity}')
+                print(f"{s2.position} {s2.rotation} {s2.polarity}")
             elif s2.position and not s1.position:
-                print(f'orienting {s1.sid} based on {s2.sid}')
+                print(f"orienting {s1.sid} based on {s2.sid}")
                 s1.orient(s2)
-                print(f'{s1.position} {s1.rotation} {s1.polarity}')
+                print(f"{s1.position} {s1.rotation} {s1.polarity}")
     return scanners
 
 
-if __name__ == '__main__':
-    with open('../data/input19.txt') as f:
+if __name__ == "__main__":
+    with open("../data/input19.txt") as f:
         lines = [line.strip() for line in f.readlines()]
 
     print(main(lines))

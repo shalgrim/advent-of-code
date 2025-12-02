@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from itertools import combinations
 
-from sympy import symbols, Eq, solve
+from sympy import Eq, solve, symbols
 
 
 @dataclass

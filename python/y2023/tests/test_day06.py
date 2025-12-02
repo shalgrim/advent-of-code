@@ -1,7 +1,7 @@
 import pytest
-
 from y2023.day06_1 import main
 from y2023.day06_2 import main as main2
+
 
 @pytest.fixture
 def test_input():
@@ -15,4 +15,3 @@ def test_part_1(test_input):
 
 def test_part_2(test_input):
     assert main2(test_input) == 71503
-

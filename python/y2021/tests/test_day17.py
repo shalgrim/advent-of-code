@@ -1,11 +1,8 @@
-import pytest
 from day17_1 import REAL_INPUT, TEST_INPUT, input_parser
 from day17_1 import main as main1
 from day17_1 import main2 as main1_1
 from day17_2 import find_pairs_that_work, find_pairs_that_work_for_initial_yvel
 from day17_2 import main as main2
-from day17_2 import submain
-
 
 TEST_ANSWER_TEXT = """23,-10  25,-9   27,-5   29,-6   22,-6   21,-7   9,0     27,-7   24,-5
     25,-7   26,-6   25,-5   6,8     11,-2   20,-5   29,-10  6,3     28,-7
@@ -26,7 +23,7 @@ def get_part_two_test_answer(answer_txt):
     parsed = answer_txt.split()
     given_answer = []
     for p in parsed:
-        x, y = p.split(',')
+        x, y = p.split(",")
         x = int(x)
         y = int(y)
         given_answer.append((x, y))
@@ -42,17 +39,17 @@ def test_input_parser():
 
 
 def test_main1():
-    txt = 'target area: x=20..30, y=-10..-5'
+    txt = "target area: x=20..30, y=-10..-5"
     assert main1(txt) == 45
     assert main1_1(-89, -140) == 9730
 
 
 def test_find_pairs_that_work_for_initial_yvel():
-    for init_yvel in range(-10, 9+1):
-        given_answer = [
-            loc for loc in PART_TWO_TEST_ANSWER if loc[1] == init_yvel
-        ]
-        my_answer = find_pairs_that_work_for_initial_yvel(20, 30, -5, -10, 6, 30, init_yvel)
+    for init_yvel in range(-10, 9 + 1):
+        given_answer = [loc for loc in PART_TWO_TEST_ANSWER if loc[1] == init_yvel]
+        my_answer = find_pairs_that_work_for_initial_yvel(
+            20, 30, -5, -10, 6, 30, init_yvel
+        )
         assert len(given_answer) == len(my_answer)
         assert sorted(given_answer) == sorted(my_answer)
 

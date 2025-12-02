@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from aoc.io import this_year_day
-from y2024.day12_1 import is_adjacent, combine_regions
+from y2024.day12_1 import combine_regions, is_adjacent
 
 
 def get_num_straight_sides(region, crop_of_interest):

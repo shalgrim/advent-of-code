@@ -1,7 +1,7 @@
 from copy import copy
 
 from aoc.io import this_year_day
-from y2024.day09_1 import expand, checksum
+from y2024.day09_1 import checksum, expand
 
 
 def main(text):

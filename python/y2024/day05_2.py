@@ -2,7 +2,7 @@ from copy import copy
 from typing import List
 
 from aoc.io import this_year_day
-from y2024.day05_1 import process_input, is_correct, get_middle_value
+from y2024.day05_1 import get_middle_value, is_correct, process_input
 
 
 def reorder_update(update, rules):

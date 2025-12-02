@@ -1,6 +1,6 @@
 from typing import List
 
-from y2024.day16_1 import create_nodes, visit_nodes, Node, Direction
+from y2024.day16_1 import Direction, Node, create_nodes, visit_nodes
 
 
 def find_next_spear_tips(spear_tip: Node, all_nodes: List[Node]) -> List[Node]:
@@ -74,14 +74,14 @@ def main(lines: List[str]) -> int:
 
 
 if __name__ == "__main__":
-    with open(f"../../data/2024/test16_1.txt") as f:
+    with open("../../data/2024/test16_1.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
 
-    with open(f"../../data/2024/test16_2.txt") as f:
+    with open("../../data/2024/test16_2.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
 
-    with open(f"../../data/2024/input16.txt") as f:
+    with open("../../data/2024/input16.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))

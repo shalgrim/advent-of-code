@@ -50,16 +50,16 @@ def run_small_machine(small_machine, x, y, highest_xyz_wire_number):
 
 
 def validate_gates(new_gates, i):
-    assert (
-        len(new_gates) == 5
-    ), f"Should be five new gates, instead got {len(new_gates)}"
+    assert len(new_gates) == 5, (
+        f"Should be five new gates, instead got {len(new_gates)}"
+    )
     # First gate should be xII XOR yII -> one_of_zII's_inputs
     first_gate_candidates = [
         gate for gate in new_gates if gate.outwire == f"z{i:02}" and gate.tipe == "XOR"
     ]
-    assert (
-        len(first_gate_candidates) == 1
-    ), f"Did not find expected gate foo XOR bar -> z{i:02}"
+    assert len(first_gate_candidates) == 1, (
+        f"Did not find expected gate foo XOR bar -> z{i:02}"
+    )
     first_gate = first_gate_candidates[0]
 
     # Second gate should be xII XOR YII -> one of the first gate's inwires
@@ -70,9 +70,9 @@ def validate_gates(new_gates, i):
         and sorted(gate.inwires) == [f"x{i:02}", f"y{i:02}"]
         and gate.tipe == "XOR"
     ]
-    assert (
-        len(second_gate_candidates) == 1
-    ), f"Did not find expected second gate xi XOR yi -> one_of_first_gate's_inwires"
+    assert len(second_gate_candidates) == 1, (
+        "Did not find expected second gate xi XOR yi -> one_of_first_gate's_inwires"
+    )
     second_gate = second_gate_candidates[0]
     exhausted_first_gate_inwire_index = first_gate.inwires.index(second_gate.outwire)
     other_first_gate_inwire_index = 1 if exhausted_first_gate_inwire_index == 0 else 0
@@ -84,9 +84,9 @@ def validate_gates(new_gates, i):
         if gate.outwire == first_gate.inwires[other_first_gate_inwire_index]
         and gate.tipe == "OR"
     ]
-    assert (
-        len(third_gate_candidates) == 1
-    ), f"Did not find expected gate foo OR bar -> other_first_gate's_inwire"
+    assert len(third_gate_candidates) == 1, (
+        "Did not find expected gate foo OR bar -> other_first_gate's_inwire"
+    )
     third_gate = third_gate_candidates[0]
 
     # Fourth gate should be xi-1 AND yi-1 -> one of the third gate's inwires
@@ -94,12 +94,12 @@ def validate_gates(new_gates, i):
         gate
         for gate in new_gates
         if gate.outwire in third_gate.inwires
-        and sorted(gate.inwires) == [f"x{i-1:02}", f"y{i-1:02}"]
+        and sorted(gate.inwires) == [f"x{i - 1:02}", f"y{i - 1:02}"]
         and gate.tipe == "AND"
     ]
-    assert (
-        len(fourth_gate_candidates) == 1
-    ), f"Did not find expected gate xi-1 AND yi-1 -> one_of_third_gate's_inwires"
+    assert len(fourth_gate_candidates) == 1, (
+        "Did not find expected gate xi-1 AND yi-1 -> one_of_third_gate's_inwires"
+    )
     fourth_gate = fourth_gate_candidates[0]
     exhausted_third_gate_inwire_index = third_gate.inwires.index(fourth_gate.outwire)
     other_third_gate_inwire_index = 1 if exhausted_third_gate_inwire_index == 0 else 0
@@ -112,9 +112,9 @@ def validate_gates(new_gates, i):
         if gate.outwire == third_gate.inwires[other_third_gate_inwire_index]
         and gate.tipe == "AND"
     ]
-    assert (
-        len(fifth_gate_candidates) == 1
-    ), f"Did not find expected gate foo AND bar -> other_third_gate's_inwires"
+    assert len(fifth_gate_candidates) == 1, (
+        "Did not find expected gate foo AND bar -> other_third_gate's_inwires"
+    )
     fifth_gate = fifth_gate_candidates[0]
 
 
@@ -170,7 +170,7 @@ def main(lines):
 
 
 if __name__ == "__main__":
-    with open(f"../../data/2024/input24_with_switches.txt") as f:
+    with open("../../data/2024/input24_with_switches.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
 

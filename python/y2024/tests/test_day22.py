@@ -5,7 +5,7 @@ from y2024.day22_2 import price_by_sequence
 
 @pytest.fixture
 def test_file_22_lines_2():
-    with open(f"../../../data/2024/test22_2.txt") as f:
+    with open("../../../data/2024/test22_2.txt") as f:
         return [line.strip() for line in f.readlines()]
 
 

@@ -1,6 +1,3 @@
-from time import sleep
-
-
 class Rock:
     def __init__(self, chamber):
         self.coordinates = None
@@ -16,9 +13,9 @@ class Rock:
         )
 
     def blow(self, direction):
-        if direction == '<' and self.can_move(-1):
+        if direction == "<" and self.can_move(-1):
             self.move(-1)
-        elif direction == '>' and self.can_move(1):
+        elif direction == ">" and self.can_move(1):
             self.move(1)
 
     def can_move(self, direction):
@@ -161,21 +158,21 @@ class Chamber:
         )
 
     def __str__(self):
-        lines = ['', '+-------+']
+        lines = ["", "+-------+"]
         for y in range(1, self.height + 1):
-            line = ['|']
+            line = ["|"]
             for x in range(7):
                 if (x, y) in self.stopped_rocks:
-                    next_char = '#'
+                    next_char = "#"
                 elif (x, y) in self.falling_rock:
-                    next_char = '@'
+                    next_char = "@"
                 else:
-                    next_char = '.'
+                    next_char = "."
                 line.append(next_char)
-            line.append('|')
-            lines.append(''.join(line))
-        lines.append('')
-        return '\n'.join(lines[::-1])
+            line.append("|")
+            lines.append("".join(line))
+        lines.append("")
+        return "\n".join(lines[::-1])
 
 
 def main(air_pattern):
@@ -188,7 +185,7 @@ def main(air_pattern):
     return chamber.height
 
 
-if __name__ == '__main__':
-    with open('../../data/2022/input17.txt') as f:
+if __name__ == "__main__":
+    with open("../../data/2022/input17.txt") as f:
         txt = f.read().strip()
     print(main(txt))

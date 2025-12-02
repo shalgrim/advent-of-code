@@ -5,7 +5,6 @@ from typing import Tuple
 from aoc.io import this_year_day
 from y2024.day22_1 import secret_number
 
-
 SINGLE_DIGIT_INTEGERS = list(range(-9, 10))
 
 

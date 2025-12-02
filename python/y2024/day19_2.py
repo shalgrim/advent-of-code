@@ -1,7 +1,7 @@
 from typing import List
 
 from aoc.io import this_year_day
-from y2024.day19_1 import process_input, PossibilityChecker
+from y2024.day19_1 import PossibilityChecker, process_input
 
 
 def main(lines: List[str]):

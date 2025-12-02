@@ -1,17 +1,16 @@
 import pytest
-
 from y2024.day16_1 import main
 
 
 @pytest.fixture
 def test_file16_lines1():
-    with open(f"../../../data/2024/test16_1.txt") as f:
+    with open("../../../data/2024/test16_1.txt") as f:
         return [line.strip() for line in f.readlines()]
 
 
 @pytest.fixture
 def test_file16_lines2():
-    with open(f"../../../data/2024/test16_2.txt") as f:
+    with open("../../../data/2024/test16_2.txt") as f:
         return [line.strip() for line in f.readlines()]
 
 

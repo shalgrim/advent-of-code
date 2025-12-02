@@ -1,61 +1,60 @@
 import pytest
-
-from day25_1 import map_step, map_step_n
 from day25_1 import main as main1
+from day25_1 import map_step, map_step_n
 
 
 @pytest.fixture
 def test_input():
-    with open('../../data/test25.txt') as f:
+    with open("../../data/test25.txt") as f:
         return [line.strip() for line in f.readlines()]
 
 
 example_1_0 = [
-    list('...>...'),
-    list('.......'),
-    list('......>'),
-    list('v.....>'),
-    list('......>'),
-    list('.......'),
-    list('..vvv..'),
+    list("...>..."),
+    list("......."),
+    list("......>"),
+    list("v.....>"),
+    list("......>"),
+    list("......."),
+    list("..vvv.."),
 ]
 example_1_1 = [
-    list('..vv>..'),
-    list('.......'),
-    list('>......'),
-    list('v.....>'),
-    list('>......'),
-    list('.......'),
-    list('....v..'),
+    list("..vv>.."),
+    list("......."),
+    list(">......"),
+    list("v.....>"),
+    list(">......"),
+    list("......."),
+    list("....v.."),
 ]
 
 example_1_2 = [
-    list('....v>.'),
-    list('..vv...'),
-    list('.>.....'),
-    list('......>'),
-    list('v>.....'),
-    list('.......'),
-    list('.......'),
+    list("....v>."),
+    list("..vv..."),
+    list(".>....."),
+    list("......>"),
+    list("v>....."),
+    list("......."),
+    list("......."),
 ]
 example_1_3 = [
-    list('......>'),
-    list('..v.v..'),
-    list('..>v...'),
-    list('>......'),
-    list('..>....'),
-    list('v......'),
-    list('.......'),
+    list("......>"),
+    list("..v.v.."),
+    list("..>v..."),
+    list(">......"),
+    list("..>...."),
+    list("v......"),
+    list("......."),
 ]
 
 example_1_4 = [
-    list('>......'),
-    list('..v....'),
-    list('..>.v..'),
-    list('.>.v...'),
-    list('...>...'),
-    list('.......'),
-    list('v......'),
+    list(">......"),
+    list("..v...."),
+    list("..>.v.."),
+    list(".>.v..."),
+    list("...>..."),
+    list("......."),
+    list("v......"),
 ]
 
 
@@ -247,15 +246,15 @@ vvv.....>>
 
 
 def test_map_step():
-    assert map_step([list('...>>>>>...')]) == [list('...>>>>.>..')]
-    assert map_step([list('...>>>>.>..')]) == [list('...>>>.>.>.')]
+    assert map_step([list("...>>>>>...")]) == [list("...>>>>.>..")]
+    assert map_step([list("...>>>>.>..")]) == [list("...>>>.>.>.")]
     assert map_step(
-        [list('..........'), list('.>v....v..'), list('.......>..'), list('..........')]
+        [list(".........."), list(".>v....v.."), list(".......>.."), list("..........")]
     ) == [
-        list('..........'),
-        list('.>........'),
-        list('..v....v>.'),
-        list('..........'),
+        list(".........."),
+        list(".>........"),
+        list("..v....v>."),
+        list(".........."),
     ]
     assert map_step(example_1_0) == example_1_1
     assert map_step(example_1_1) == example_1_2

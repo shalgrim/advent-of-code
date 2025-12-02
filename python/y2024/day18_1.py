@@ -55,7 +55,7 @@ def main(lines, grid_size, num_to_fall):
 
         try:
             min_distance = min(node.distance for node in unvisited_nodes.values())
-        except ValueError as e:
+        except ValueError:
             ...  # what
         if min_distance == math.inf:
             ...  # what
@@ -65,7 +65,7 @@ def main(lines, grid_size, num_to_fall):
                 for node in unvisited_nodes.values()
                 if node.distance == min_distance
             ][0]
-        except IndexError as e:
+        except IndexError:
             ...  # what
 
     return current_node.distance

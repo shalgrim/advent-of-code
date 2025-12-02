@@ -1,5 +1,5 @@
-from y2022.day25_1 import backconvert, convert, fuelsum, main
 import pytest
+from y2022.day25_1 import backconvert, convert, fuelsum, main
 
 
 @pytest.fixture

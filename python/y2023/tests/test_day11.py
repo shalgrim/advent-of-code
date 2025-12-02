@@ -1,5 +1,5 @@
 import pytest
-from y2023.day11_1 import main, build_map
+from y2023.day11_1 import build_map, main
 from y2023.day11_2 import main as main2
 
 

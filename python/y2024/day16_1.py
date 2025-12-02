@@ -1,6 +1,5 @@
-from enum import IntEnum
-
 import math
+from enum import IntEnum
 
 
 class Direction(IntEnum):
@@ -112,16 +111,16 @@ def main(lines):
 
 
 if __name__ == "__main__":
-    with open(f"../../data/2024/test16_1.txt") as f:
+    with open("../../data/2024/test16_1.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
 
-    with open(f"../../data/2024/test16_2.txt") as f:
+    with open("../../data/2024/test16_2.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
 
     # sys.setrecursionlimit(10000)
-    with open(f"../../data/2024/input16.txt") as f:
+    with open("../../data/2024/input16.txt") as f:
         lines = [line.strip() for line in f.readlines()]
     print(main(lines))
     # year, day = this_year_day(pad_day=True)

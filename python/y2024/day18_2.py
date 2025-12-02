@@ -1,5 +1,3 @@
-import math
-
 from aoc.io import this_year_day
 from y2024.day18_1 import main
 

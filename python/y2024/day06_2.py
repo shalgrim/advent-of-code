@@ -1,5 +1,5 @@
 from aoc.io import this_year_day
-from y2024.day06_1 import Direction, Map
+from y2024.day06_1 import Map
 
 
 def main(lines):

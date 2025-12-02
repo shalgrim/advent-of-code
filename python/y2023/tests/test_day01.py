@@ -1,6 +1,7 @@
 import pytest
 from y2023.day01_1 import main
-from y2023.day01_2 import main as main2, calibration_value
+from y2023.day01_2 import calibration_value
+from y2023.day01_2 import main as main2
 
 
 @pytest.fixture
@@ -18,6 +19,7 @@ def test_input_2():
 def test_calibration_value_part_2():
     line = "126dzbvg6two4oneightntd"
     assert calibration_value(line) == 18
+
 
 def test_part_1(test_input):
     assert main(test_input) == 142
