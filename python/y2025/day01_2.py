@@ -25,8 +25,4 @@ def main(lines):
     return answer
 
 if __name__ == '__main__':
-    # TODO: Fix so it works with files that start with "day" as well as just "d"
-    # print(main(read_input()))
-    with open("../../data/2025/input01.txt") as f:
-        lines = [line.strip() for line in f.readlines()]
-    print(main(lines))
+    print(main(read_input()))
