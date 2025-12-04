@@ -1,6 +1,6 @@
 from typing import List
 
-from coding_puzzle_tools import InputMode, read_input
+from coding_puzzle_tools import read_input
 
 
 def max_joltage_per_bank(line: str) -> int:
