@@ -44,8 +44,8 @@ def main(lines: list[str], *, num_pairs=1000) -> int:
 
         if groupings[index1] is not groupings[index2]:
             new_grouping = groupings[index1].union(groupings[index2])
-            groupings[index1] = new_grouping
-            groupings[index2] = new_grouping
+            for index in new_grouping:
+                groupings[index] = new_grouping
 
     biggest_groupings = []
     while len(biggest_groupings) < 3:
@@ -54,6 +54,7 @@ def main(lines: list[str], *, num_pairs=1000) -> int:
         for k, v in groupings.items():
             if len(v) == largest_grouping_size:
                 grouping = v
+                break
         for index in grouping:
             del groupings[index]
     return math.prod(biggest_groupings)
