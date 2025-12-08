@@ -1,7 +1,6 @@
 import pytest
 from y2025.day08_1 import main
-
-# from y2025.day08_2 import main as main2
+from y2025.day08_2 import main as main2
 
 
 @pytest.fixture
@@ -14,5 +13,5 @@ def test_part1(test_file_08):
     assert main(test_file_08, num_pairs=10) == 40
 
 
-# def test_part2(test_file_08):
-#     assert main2(test_file_08) == 40
+def test_part2(test_file_08):
+    assert main2(test_file_08) == 25272

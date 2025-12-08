@@ -1,6 +1,6 @@
 import math
-from collections import defaultdict
 from itertools import combinations
+from typing import Any
 
 from coding_puzzle_tools import read_input
 
@@ -23,9 +23,7 @@ def get_points(lines: list[str]) -> list[Point]:
     return points
 
 
-def main(lines: list[str], *, num_pairs=1000) -> int:
-    points = get_points(lines)
-    indexed_points = {i: point for i, point in enumerate(points)}
+def get_sorted_distances(indexed_points: dict[int, Point]) -> list[tuple[Any, Any]]:
     distances = {}
 
     for combo_key in combinations(indexed_points.keys(), 2):
@@ -35,6 +33,13 @@ def main(lines: list[str], *, num_pairs=1000) -> int:
 
     # now sort combos by distances
     sorted_distances = sorted([(value, key) for key, value in distances.items()])
+    return sorted_distances
+
+
+def main(lines: list[str], *, num_pairs=1000) -> int:
+    points = get_points(lines)
+    indexed_points = {i: point for i, point in enumerate(points)}
+    sorted_distances = get_sorted_distances(indexed_points)
     distances_of_note = sorted_distances[:num_pairs]
 
     groupings = {index: {index} for index in indexed_points.keys()}
