@@ -1,4 +1,3 @@
-import math
 from itertools import pairwise
 from math import prod
 from typing import List

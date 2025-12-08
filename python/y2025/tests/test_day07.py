@@ -14,4 +14,10 @@ def test_part1(test_file_07):
 
 
 def test_part2(test_file_07):
-    assert main2(test_file_07) == 3263827
+    assert main2(test_file_07[:2]) == 1
+    assert main2(test_file_07[:3]) == 2
+    assert main2(test_file_07[:4]) == 2
+    assert main2(test_file_07[:5]) == 4
+    assert main2(test_file_07[:6]) == 4
+    assert main2(test_file_07[:7]) == 8
+    assert main2(test_file_07) == 40
