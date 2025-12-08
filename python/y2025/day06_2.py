@@ -6,7 +6,6 @@ from coding_puzzle_tools import read_input
 
 
 def main(lines: List[str]) -> int:
-    num_rows = len(lines)
     num_columns = max(len(line) for line in lines)
     operators = lines[-1].split()
     operator_indexes = [i for i, c in enumerate(lines[-1]) if c.strip()]
