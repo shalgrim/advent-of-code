@@ -10,8 +10,8 @@ def test_file_09():
 
 
 def test_part1(test_file_09):
-    assert main(test_file_09) == 10
+    assert main(test_file_09) == 50
 
 
 def test_part2(test_file_09):
-    assert main2(test_file_09) == 25272
+    assert main2(test_file_09) == 24
