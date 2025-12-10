@@ -34,6 +34,10 @@ class Machine:
     def _extract_joltages(self, raw_joltage_data):
         self.required_joltages = [int(n) for n in raw_joltage_data[1:-1].split(",")]
 
+    @property
+    def joltage_as_dict(self):
+        return {i: v for i, v in enumerate(self.joltages)}
+
     def push_button(self, index: int) -> None:
         for light_to_switch in self.buttons[index]:
             self.lights[light_to_switch] = not self.lights[light_to_switch]

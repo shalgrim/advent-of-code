@@ -1,5 +1,6 @@
 import pytest
 from y2025.day10_1 import main
+from y2025.day10_2 import get_total_joltage
 from y2025.day10_2 import main as main2
 
 
@@ -11,6 +12,22 @@ def test_file_10():
 
 def test_part1(test_file_10):
     assert main(test_file_10) == 7
+
+
+def test_get_total_joltage():
+    combo = [
+        (3,),
+        (1, 3),
+        (1, 3),
+        (1, 3),
+        (2, 3),
+        (2, 3),
+        (2, 3),
+        (0, 2),
+        (0, 1),
+        (0, 1),
+    ]
+    assert get_total_joltage(combo, 4) == [3, 5, 4, 7]
 
 
 def test_part2(test_file_10):
