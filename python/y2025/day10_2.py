@@ -5,8 +5,9 @@ from y2025.day10_1 import JoltageError, Machine
 
 
 def min_button_presses(machine: Machine):
-    i = 1
+    i = max(machine.required_joltages)
     while True:
+        print(f"sub i: {i}")
         for combo in itertools.combinations_with_replacement(
             range(len(machine.buttons)), i
         ):
