@@ -1,3 +1,5 @@
+from typing import Any
+
 from coding_puzzle_tools import read_input
 from y2025.day11_1 import get_devices
 
@@ -10,9 +12,15 @@ from y2025.day11_1 import get_devices
 # and you can keep building it up that way
 
 
-def main(lines: list[str]) -> int:
+def main(lines: list[str], start_code: str = "svr") -> int:
     devices = get_devices(lines)
-    paths = [[output] for output in devices["svr"]]
+    paths = get_all_paths(devices, start_code)
+    valid_paths = [path for path in paths if "fft" in path and "dac" in path]
+    return len(valid_paths)
+
+
+def get_all_paths(devices: dict[str, list[str]], start_code: str) -> list[list[str]]:
+    paths = [[output] for output in devices[start_code]]
     while not all(path[-1] == "out" for path in paths):
         new_paths = []
         for path in paths:
@@ -23,8 +31,7 @@ def main(lines: list[str]) -> int:
                         continue
                     new_paths.append(path + [output])
         paths = new_paths
-    valid_paths = [path for path in paths if "fft" in path and "dac" in path]
-    return len(valid_paths)
+    return paths
 
 
 if __name__ == "__main__":

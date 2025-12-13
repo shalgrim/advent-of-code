@@ -1,7 +1,7 @@
 from coding_puzzle_tools import read_input
 
 
-def get_devices(lines):
+def get_devices(lines: list[str]) -> dict[str, list[str]]:
     answer = {}
     for line in lines:
         key = line.split(":")[0]
